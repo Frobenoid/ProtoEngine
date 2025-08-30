@@ -7,7 +7,20 @@
 import MetalKit
 
 extension Model {
-    func render(encoder: MTLRenderCommandEncoder) {
+    func render(encoder: MTLRenderCommandEncoder, uniforms: Uniforms) {
+
+        var uniforms = uniforms
+        uniforms.modelMatrix = transform.modelMatrix
+        uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
+        
+        print("Uniforms to send: \(uniforms)")
+        
+        encoder.setVertexBytes(
+            &uniforms,
+            length: MemoryLayout<Uniforms>.stride,
+            index: UniformsBuffer.index
+        )
+
         for mesh in meshes {
             for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
                 encoder.setVertexBuffer(vertexBuffer, offset: 0, index: index)
@@ -47,7 +60,7 @@ extension Model {
                 )
 
                 encoder.drawIndexedPrimitives(
-                    type: .triangle,
+                    type: .line,
                     indexCount: submesh.indexCount,
                     indexType: submesh.indexType,
                     indexBuffer: submesh.indexBuffer,

@@ -8,10 +8,16 @@
 #include <metal_stdlib>
 using namespace metal;
 #import "Shaders.h"
+#import "Common.h"
 
-vertex VertexOut vertex_main(VertexIn in [[stage_in]]) {
+vertex VertexOut vertex_main(VertexIn in [[stage_in]],
+                             constant Uniforms &uniforms [[buffer(UniformsBuffer)]]
+                             ) {
+    float4 position = uniforms.projectionMatrix * uniforms.viewMatrix
+    * uniforms.modelMatrix * in.position;
+    
     VertexOut out {
-        .poisiton = in.position
+        .poisiton = position
     };
     return out;
 }

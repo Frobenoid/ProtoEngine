@@ -25,7 +25,11 @@ struct ForwardPass: RenderPass {
 
     }
 
-    func draw(commandBuffer: MTLCommandBuffer, scene: ProtoScene) {
+    func draw(
+        commandBuffer: MTLCommandBuffer,
+        scene: ProtoScene,
+        uniforms: Uniforms
+    ) {
         guard
             let descriptor = descriptor,
             let renderEncoder = commandBuffer.makeRenderCommandEncoder(
@@ -41,7 +45,7 @@ struct ForwardPass: RenderPass {
 
         // MARK: - Model rendering.
         for model in scene.models {
-            model.render(encoder: renderEncoder)
+            model.render(encoder: renderEncoder, uniforms: uniforms)
         }
 
         renderEncoder.endEncoding()

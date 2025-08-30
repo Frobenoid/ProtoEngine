@@ -15,6 +15,7 @@ struct VertexIn {
 
 struct VertexOut {
     float4 poisiton [[position]];
+    float2 uv;
 };
 
 #endif /* Shaders_h */

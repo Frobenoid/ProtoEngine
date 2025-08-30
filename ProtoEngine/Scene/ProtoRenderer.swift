@@ -15,6 +15,9 @@ class ProtoRenderer: NSObject {
     // MARK: - Render passes
     var forwardPass: ForwardPass
 
+    // Uniforms
+    var uniforms = Uniforms()
+
     init(metalView: MTKView) {
         guard
             let device = MTLCreateSystemDefaultDevice(),
@@ -64,7 +67,8 @@ extension ProtoRenderer {
     }
 
     func updateUniforms(scene: ProtoScene) {
-
+        uniforms.viewMatrix = scene.camera.viewMatrix
+        uniforms.projectionMatrix = scene.camera.projectionMatrix
     }
 
     func draw(scene: ProtoScene, in view: MTKView) {
@@ -77,7 +81,11 @@ extension ProtoRenderer {
 
         // MARK: - Render passes
         forwardPass.descriptor = descriptor
-        forwardPass.draw(commandBuffer: commandBuffer, scene: scene)
+        forwardPass.draw(
+            commandBuffer: commandBuffer,
+            scene: scene,
+            uniforms: uniforms
+        )
 
         // MARK: - ?
         guard let drawable = view.currentDrawable else {

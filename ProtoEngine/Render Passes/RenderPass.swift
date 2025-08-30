@@ -14,9 +14,9 @@ protocol RenderPass {
     mutating func resize(view: MTKView, size: CGSize)
     func draw(
         commandBuffer: MTLCommandBuffer,
-        scene: ProtoScene
-            // uniforms: Uniforms,
-            // params: Params
+        scene: ProtoScene,
+        uniforms: Uniforms,
+        // params: Params
     )
 }
 
