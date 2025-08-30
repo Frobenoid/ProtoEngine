@@ -27,5 +27,5 @@ fragment float4 fragment_main(VertexOut in [[stage_in]],
                                                      in.uv ).rgb;
     }
     
-    return float4(1,0,0,1);
+    return float4(material.baseColor, 1);
 }

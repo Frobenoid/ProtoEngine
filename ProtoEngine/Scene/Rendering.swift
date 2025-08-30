@@ -13,8 +13,6 @@ extension Model {
         uniforms.modelMatrix = transform.modelMatrix
         uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
         
-        print("Uniforms to send: \(uniforms)")
-        
         encoder.setVertexBytes(
             &uniforms,
             length: MemoryLayout<Uniforms>.stride,

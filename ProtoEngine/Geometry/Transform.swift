@@ -19,7 +19,6 @@ extension Transform {
         let rotation = float4x4(rotation: rotation)
         let scale = float4x4(scaling: scale)
         let modelMatrix = translation * rotation * scale
-        print("Model matrix: \(modelMatrix)")
         return modelMatrix
     }
 }

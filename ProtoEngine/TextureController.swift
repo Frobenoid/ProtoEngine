@@ -24,7 +24,6 @@ enum TextureController {
             texture: texture,
             options: textureLoaderOptions
         )
-        print("loaded texture from USD file", name)
         textures[name] = texture
         return texture
     }
