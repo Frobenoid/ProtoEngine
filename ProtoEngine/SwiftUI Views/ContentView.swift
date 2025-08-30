@@ -9,11 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        ZStack {
+        VStack {
+            ProtoMetalView()
             ProtoMetalView()
         }
-        .border(Color.red)
-        .padding()
     }
 }
 

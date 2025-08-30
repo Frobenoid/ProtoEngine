@@ -32,11 +32,8 @@ struct ForwardPass: RenderPass {
                 descriptor: descriptor
             )
         else {
-            print("No render descriptor")
             return
         }
-        
-        print(descriptor)
 
         renderEncoder.label = label
         renderEncoder.setDepthStencilState(depthStencilState)

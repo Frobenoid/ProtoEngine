@@ -35,9 +35,9 @@ class ProtoRenderer: NSObject {
 
         super.init()
         metalView.clearColor = MTLClearColor(
-            red: 0,
-            green: 0,
-            blue: 1,
+            red: 0.05,
+            green: 0.1,
+            blue: 0.16,
             alpha: 1
         )
         metalView.depthStencilPixelFormat = .depth32Float
@@ -78,7 +78,7 @@ extension ProtoRenderer {
         // MARK: - Render passes
         forwardPass.descriptor = descriptor
         forwardPass.draw(commandBuffer: commandBuffer, scene: scene)
-        
+
         // MARK: - ?
         guard let drawable = view.currentDrawable else {
             return

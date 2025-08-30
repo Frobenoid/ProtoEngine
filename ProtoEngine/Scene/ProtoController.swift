@@ -31,7 +31,7 @@ extension ProtoController: MTKViewDelegate {
     /// Called each frame.
     func draw(in view: MTKView) {
         let currentTime = CFAbsoluteTimeGetCurrent()
-        let deltaTime = (currentTime )
+        let deltaTime = (currentTime)
         scene.update(deltaTime: Float(deltaTime))
         renderer.draw(scene: scene, in: view)
     }
