@@ -1,0 +1,89 @@
+//
+//  ProtoRenderer.swift
+//  ProtoEngine
+//
+//  Created by Milton Montiel on 29/08/25.
+//
+
+import MetalKit
+
+class ProtoRenderer: NSObject {
+    static var device: MTLDevice!
+    static var commandQueue: MTLCommandQueue!
+    static var library: MTLLibrary!
+
+    // MARK: - Render passes
+    var forwardPass: ForwardPass
+
+    init(metalView: MTKView) {
+        guard
+            let device = MTLCreateSystemDefaultDevice(),
+            let commandQueue = device.makeCommandQueue()
+        else {
+            fatalError("Metal is not supported on this device.")
+        }
+
+        Self.device = device
+        Self.commandQueue = commandQueue
+        metalView.device = device
+
+        // MARK: - Shader function library creation
+        let library = device.makeDefaultLibrary()
+        Self.library = library
+
+        forwardPass = ForwardPass(view: metalView)
+
+        super.init()
+        metalView.clearColor = MTLClearColor(
+            red: 0,
+            green: 0,
+            blue: 1,
+            alpha: 1
+        )
+        metalView.depthStencilPixelFormat = .depth32Float
+        mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
+    }
+
+    static func buildDepthStencilState() -> MTLDepthStencilState? {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = .less
+        descriptor.isDepthWriteEnabled = true
+        return ProtoRenderer.device.makeDepthStencilState(
+            descriptor: descriptor
+        )
+    }
+}
+
+extension ProtoRenderer {
+    func mtkView(
+        _ view: MTKView,
+        drawableSizeWillChange size: CGSize
+    ) {
+        // MARK: - Render passes resizing
+        forwardPass.resize(view: view, size: size)
+    }
+
+    func updateUniforms(scene: ProtoScene) {
+
+    }
+
+    func draw(scene: ProtoScene, in view: MTKView) {
+        guard
+            let commandBuffer = Self.commandQueue.makeCommandBuffer(),
+            let descriptor = view.currentRenderPassDescriptor
+        else { return }
+
+        updateUniforms(scene: scene)
+
+        // MARK: - Render passes
+        forwardPass.descriptor = descriptor
+        forwardPass.draw(commandBuffer: commandBuffer, scene: scene)
+        
+        // MARK: - ?
+        guard let drawable = view.currentDrawable else {
+            return
+        }
+        commandBuffer.present(drawable)
+        commandBuffer.commit()
+    }
+}
