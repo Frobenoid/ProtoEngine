@@ -10,7 +10,7 @@ import Foundation
 /// Stores scene information such as models and cameras.
 struct ProtoScene {
     var models: [Model] = []
-    var camera = ArcballCamera()
+    var camera = PlayerCamera()
 
     lazy var sphere: Model = {
         var sphere = Model(name: "Sphere", primitiveType: .sphere)
