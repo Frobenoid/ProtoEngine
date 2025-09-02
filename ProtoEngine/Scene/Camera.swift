@@ -13,7 +13,7 @@ protocol Camera: Transformable {
     mutating func update(deltaTime: Float)
 }
 
-struct FPCamera: Camera {
+struct FPCamera: Camera, Movement {
     var transform = Transform()
     var aspect: Float = 1.0
     var fov = Float(70).degreesToRadians
@@ -37,5 +37,8 @@ struct FPCamera: Camera {
     }
 
     mutating func update(deltaTime: Float) {
+        let transform = updateInput(deltaTime: deltaTime)
+        rotation += transform.rotation
+        position += transform.position
     }
 }

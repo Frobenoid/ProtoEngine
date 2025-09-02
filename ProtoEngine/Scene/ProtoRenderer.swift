@@ -17,7 +17,9 @@ class ProtoRenderer: NSObject {
 
     // Uniforms
     var uniforms = Uniforms()
-
+    
+    var lastTime: Double = CFAbsoluteTimeGetCurrent()
+    
     init(metalView: MTKView) {
         guard
             let device = MTLCreateSystemDefaultDevice(),
@@ -58,6 +60,7 @@ class ProtoRenderer: NSObject {
 }
 
 extension ProtoRenderer {
+    /// Called on view change from ``ProtoScene``
     func mtkView(
         _ view: MTKView,
         drawableSizeWillChange size: CGSize
@@ -71,6 +74,7 @@ extension ProtoRenderer {
         uniforms.projectionMatrix = scene.camera.projectionMatrix
     }
 
+    /// Called each frame from ``ProtoScene``.
     func draw(scene: ProtoScene, in view: MTKView) {
         guard
             let commandBuffer = Self.commandQueue.makeCommandBuffer(),
@@ -78,7 +82,8 @@ extension ProtoRenderer {
         else { return }
 
         updateUniforms(scene: scene)
-
+        
+        
         // MARK: - Render passes
         forwardPass.descriptor = descriptor
         forwardPass.draw(

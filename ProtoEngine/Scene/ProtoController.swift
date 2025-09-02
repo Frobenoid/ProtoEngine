@@ -11,6 +11,8 @@ class ProtoController: NSObject {
     var scene: ProtoScene
     var renderer: ProtoRenderer
 
+    var lastTime: Double = CFAbsoluteTime()
+
     init(metalView: MTKView) {
         renderer = ProtoRenderer(metalView: metalView)
         scene = ProtoScene()
@@ -30,9 +32,12 @@ extension ProtoController: MTKViewDelegate {
 
     /// Called each frame.
     func draw(in view: MTKView) {
+        // MARK: - Time information
         let currentTime = CFAbsoluteTimeGetCurrent()
-        let deltaTime = (currentTime)
-        scene.update(deltaTime: Float(deltaTime))
+        let deltaTime = Float(currentTime - lastTime)
+        lastTime = currentTime
+        scene.update(deltaTime: deltaTime)
+        
         renderer.draw(scene: scene, in: view)
     }
 

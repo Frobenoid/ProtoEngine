@@ -39,12 +39,11 @@ struct ProtoScene {
     }
 
     mutating func update(size: CGSize) {
-
         camera.update(size: size)
     }
 
     mutating func update(deltaTime: Float) {
-
+        camera.update(deltaTime: deltaTime)
     }
 
     init() {
