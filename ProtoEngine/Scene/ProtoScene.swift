@@ -12,25 +12,8 @@ struct ProtoScene {
     var models: [Model] = []
     var camera = PlayerCamera()
 
-    lazy var sphere: Model = {
-        var sphere = Model(name: "Sphere", primitiveType: .sphere)
-        sphere.scale = 2
-        sphere.meshes[0].submeshes[0].material.baseColor = [0, 1, 0]
-        return sphere
-    }()
-
-    lazy var cube: Model = {
-        var cube = Model(name: "Cube", primitiveType: .box)
-        cube.scale = 2
-        cube.meshes[0].submeshes[0].material.baseColor = [1, 0, 0]
-        return cube
-    }()
-
-    lazy var ico: Model = {
-        var ico = Model(name: "Sphere", primitiveType: .ico)
-        ico.scale = 1
-        ico.meshes[0].submeshes[0].material.baseColor = [0, 0, 1]
-        return ico
+    lazy var model: Model = {
+        Model(name: "gizmo.usdc")
     }()
 
     var defaultView: Transform {
@@ -48,6 +31,6 @@ struct ProtoScene {
 
     init() {
         camera.transform = defaultView
-        models = [sphere, cube, ico]
+        models = [model]
     }
 }

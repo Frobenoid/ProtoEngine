@@ -58,7 +58,7 @@ extension Model {
                 )
 
                 encoder.drawIndexedPrimitives(
-                    type: .line,
+                    type: .triangle,
                     indexCount: submesh.indexCount,
                     indexType: submesh.indexType,
                     indexBuffer: submesh.indexBuffer,

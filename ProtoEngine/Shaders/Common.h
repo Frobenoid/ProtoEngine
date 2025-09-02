@@ -17,6 +17,15 @@ typedef struct {
     matrix_float3x3 normalMatrix;
 } Uniforms;
 
+typedef struct {
+    uint32_t width;
+    uint32_t height;
+    uint32_t tiling;
+    uint32_t lightCount;
+    vector_float3 cameraPosition;
+    float scaleFactor;
+} Params;
+
 typedef enum {
     Position = 0,
     Normal = 1,

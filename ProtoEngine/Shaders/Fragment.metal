@@ -10,9 +10,11 @@ using namespace metal;
 #import "Shaders.h"
 #import "Common.h"
 
-fragment float4 fragment_main(VertexOut in [[stage_in]],
-                              texture2d<float> baseColorTexture [[texture(BaseColor)]],
-                              constant Material &_material [[buffer(MaterialBuffer)]]
+fragment float4 fragment_main(
+//                              constant Params &params [[buffer(ParamsBuffer)]],
+                              VertexOut in [[stage_in]],
+                              constant Material &_material [[buffer(MaterialBuffer)]],
+                              texture2d<float> baseColorTexture [[texture(BaseColor)]]
                               ) {
     Material material = _material;
     constexpr sampler textureSampler(
@@ -24,7 +26,7 @@ fragment float4 fragment_main(VertexOut in [[stage_in]],
     if (!is_null_texture(baseColorTexture)) {
         material.baseColor = baseColorTexture.sample(
                                                      textureSampler,
-                                                     in.uv ).rgb;
+                                                     in.uv).rgb;
     }
     
     return float4(material.baseColor, 1);

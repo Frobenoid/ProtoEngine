@@ -50,6 +50,10 @@ extension MDLMaterial {
 extension Submesh.Textures {
     fileprivate init(material: MDLMaterial?) {
         baseColor = material?.texture(type: .baseColor)
+        roughness = material?.texture(type: .roughness)
+        normal = material?.texture(type: .tangentSpaceNormal)
+        metallic = material?.texture(type: .metallic)
+        aoTexture = material?.texture(type: .ambientOcclusion)
     }
 }
 
