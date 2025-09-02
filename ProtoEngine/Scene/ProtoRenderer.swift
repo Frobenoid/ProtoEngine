@@ -83,7 +83,6 @@ extension ProtoRenderer {
 
         updateUniforms(scene: scene)
         
-        
         // MARK: - Render passes
         forwardPass.descriptor = descriptor
         forwardPass.draw(
@@ -92,7 +91,6 @@ extension ProtoRenderer {
             uniforms: uniforms
         )
 
-        // MARK: - ?
         guard let drawable = view.currentDrawable else {
             return
         }

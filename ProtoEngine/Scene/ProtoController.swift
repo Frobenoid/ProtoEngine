@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import SwiftUI
 
 class ProtoController: NSObject {
     var scene: ProtoScene
@@ -13,9 +14,9 @@ class ProtoController: NSObject {
 
     var lastTime: Double = CFAbsoluteTime()
 
-    init(metalView: MTKView) {
+    init(metalView: MTKView, scene: ProtoScene) {
         renderer = ProtoRenderer(metalView: metalView)
-        scene = ProtoScene()
+        self.scene = scene
         super.init()
         metalView.delegate = self
         mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)

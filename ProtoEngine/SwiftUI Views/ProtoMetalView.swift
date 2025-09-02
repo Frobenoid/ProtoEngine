@@ -11,11 +11,12 @@ import SwiftUI
 struct ProtoMetalView: View {
     @State private var metalView = MTKView()
     @State private var controller: ProtoController?
+    @Environment(ProtoScene.self) private var scene
 
     var body: some View {
         ProtoMetalViewRepresentable(metalView: $metalView)
             .onAppear {
-                controller = ProtoController(metalView: metalView)
+                controller = ProtoController(metalView: metalView, scene: scene)
             }
     }
 }
@@ -37,8 +38,12 @@ struct ProtoMetalViewRepresentable: NSViewRepresentable {
 }
 
 #Preview {
+    var scene = ProtoScene()
+    
     VStack {
-        Text("Metal View")
-        ProtoMetalView()
-    }
+        ProtoMetalView().environment(scene)
+        Button("Box") {
+            scene.addPrimitive(primitive: .box)
+        }
+    }.padding()
 }
