@@ -71,6 +71,7 @@ extension ProtoRenderer {
     func updateUniforms(scene: ProtoScene) {
         uniforms.viewMatrix = scene.camera.viewMatrix
         uniforms.projectionMatrix = scene.camera.projectionMatrix
+        params.cameraPosition = scene.camera.position
         params.lightCount = UInt32(scene.lighting.lights.count)
     }
 
