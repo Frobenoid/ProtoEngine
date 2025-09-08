@@ -7,16 +7,27 @@
 import MetalKit
 
 extension Model {
-    func render(encoder: MTLRenderCommandEncoder, uniforms: Uniforms) {
+    func render(
+        encoder: MTLRenderCommandEncoder,
+        uniforms: Uniforms,
+        params: Params
+    ) {
 
         var uniforms = uniforms
+        var params = params
         uniforms.modelMatrix = transform.modelMatrix
         uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
-        
+
         encoder.setVertexBytes(
             &uniforms,
             length: MemoryLayout<Uniforms>.stride,
             index: UniformsBuffer.index
+        )
+
+        encoder.setFragmentBytes(
+            &params,
+            length: MemoryLayout<Params>.stride,
+            index: ParamsBuffer.index
         )
 
         for mesh in meshes {

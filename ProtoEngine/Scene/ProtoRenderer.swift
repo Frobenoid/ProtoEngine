@@ -32,12 +32,13 @@ class ProtoRenderer: NSObject {
 
     // Uniforms
     var uniforms = Uniforms()
+    var params = Params()
 
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
 
     init(metalView: MTKView) {
         metalView.device = Self.device
-        
+
         // MARK: - Render pass initialization.
         forwardPass = ForwardPass(view: metalView)
 
@@ -70,6 +71,7 @@ extension ProtoRenderer {
     func updateUniforms(scene: ProtoScene) {
         uniforms.viewMatrix = scene.camera.viewMatrix
         uniforms.projectionMatrix = scene.camera.projectionMatrix
+        params.lightCount = UInt32(scene.lighting.lights.count)
     }
 
     /// Called each frame from ``ProtoScene``.
@@ -86,7 +88,8 @@ extension ProtoRenderer {
         forwardPass.draw(
             commandBuffer: commandBuffer,
             scene: scene,
-            uniforms: uniforms
+            uniforms: uniforms,
+            params: params
         )
 
         // MARK: - Presenting to a drawable

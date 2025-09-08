@@ -8,10 +8,11 @@
 #include <metal_stdlib>
 using namespace metal;
 #import "Shaders.h"
-#import "Common.h"
+#import "Lighting.h"
 
 fragment float4 fragment_main(
-//                              constant Params &params [[buffer(ParamsBuffer)]],
+                              constant Params &params [[buffer(ParamsBuffer)]],
+                              constant Light *lights [[buffer(LightBuffer)]],
                               VertexOut in [[stage_in]],
                               constant Material &_material [[buffer(MaterialBuffer)]],
                               texture2d<float> baseColorTexture [[texture(BaseColor)]]
@@ -29,5 +30,8 @@ fragment float4 fragment_main(
                                                      in.uv).rgb;
     }
     
-    return float4(material.baseColor, 1);
+    float3 normalDirection = normalize(in.worldNormal);
+    float3 color = phongLightint(normalDirection, in.worldPosition, params, lights, material.baseColor);
+    
+    return float4(color, 1);
 }

@@ -28,7 +28,8 @@ struct ForwardPass: RenderPass {
     func draw(
         commandBuffer: MTLCommandBuffer,
         scene: ProtoScene,
-        uniforms: Uniforms
+        uniforms: Uniforms,
+        params: Params
     ) {
         guard
             let descriptor = descriptor,
@@ -43,9 +44,20 @@ struct ForwardPass: RenderPass {
         renderEncoder.setDepthStencilState(depthStencilState)
         renderEncoder.setRenderPipelineState(pipelineState)
 
+        var lights = scene.lighting.lights
+        renderEncoder.setFragmentBytes(
+            &lights,
+            length: MemoryLayout<Light>.stride * lights.count,
+            index: LightBuffer.index
+        )
+
         // MARK: - Model rendering.
         for model in scene.models {
-            model.render(encoder: renderEncoder, uniforms: uniforms)
+            model.render(
+                encoder: renderEncoder,
+                uniforms: uniforms,
+                params: params
+            )
         }
 
         renderEncoder.endEncoding()

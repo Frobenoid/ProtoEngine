@@ -10,6 +10,9 @@
 
 #import <simd/simd.h>
 
+typedef vector_float3 vec3;
+typedef uint32_t uint;
+
 typedef struct {
     matrix_float4x4 modelMatrix;
     matrix_float4x4 viewMatrix;
@@ -18,11 +21,14 @@ typedef struct {
 } Uniforms;
 
 typedef struct {
+    /// MSL doesn't have a dynamic array feature so the need to pass
+    /// the number of elements in an array.
+    uint lightCount;
+    vec3 cameraPosition;
+    
     uint32_t width;
     uint32_t height;
     uint32_t tiling;
-    uint32_t lightCount;
-    vector_float3 cameraPosition;
     float scaleFactor;
 } Params;
 
@@ -59,5 +65,25 @@ typedef struct {
     float metallic;
     float ambientOcclusion;
 } Material;
+
+typedef enum {
+    Unused = 0,
+    Sun = 1,
+    Spot = 2,
+    Point = 3,
+    Ambient = 4
+} LightType;
+
+typedef struct {
+    LightType type;
+    vec3 position;
+    vec3 color;
+    vec3 specularColor;
+    float radius;
+    vec3 attenuation;
+    float coneAngle;
+    vec3 coneDirection;
+    float coneAttenuation;
+} Light;
 
 #endif /* Common_h */

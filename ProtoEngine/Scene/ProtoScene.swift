@@ -11,7 +11,8 @@ import Foundation
 struct ProtoScene {
     var models: [Model] = []
     var camera = PlayerCamera()
-
+    let lighting = Lighting()
+    
     lazy var model: Model = {
         Model(name: "gizmo.usdc")
     }()

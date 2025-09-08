@@ -16,7 +16,7 @@ protocol RenderPass {
         commandBuffer: MTLCommandBuffer,
         scene: ProtoScene,
         uniforms: Uniforms,
-        // params: Params
+        params: Params
     )
 }
 
