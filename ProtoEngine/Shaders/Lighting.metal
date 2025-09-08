@@ -31,7 +31,7 @@ float3 phongLightint(float3 normal, float3 position, constant Params &params,
                 break;
             }
             case Ambient: {
-                break;
+                ambientColor += light.color;
             }
             case Unused: {
                 break;

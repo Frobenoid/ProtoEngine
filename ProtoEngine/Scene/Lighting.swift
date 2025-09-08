@@ -12,10 +12,18 @@ struct Lighting {
         return light
     }()
     
+    let ambientLight: Light = {
+        var light = Self.buildDefaultLight()
+        light.color = [0.05, 0.1, 0]
+        light.type = Ambient
+        return light
+    }()
+    
     var lights: [Light] = []
     
     init() {
         lights.append(sunlight)
+        lights.append(ambientLight)
     }
     
     static func buildDefaultLight() -> Light {
