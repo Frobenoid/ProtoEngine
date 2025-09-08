@@ -35,6 +35,13 @@ float3 phongLightint(float3 normal, float3 position, constant Params &params,
                 break;
             }
             case Point: {
+                float d = distance(light.position, position);
+                float3 lightDirection = normalize(light.position - position);
+                float attenuation = 1.0 / (light.attenuation.x + light.attenuation.y * d + light.attenuation.z * d * d);
+                float diffuseIntensity = saturate(dot(lightDirection, normal));
+                float3 color = light.color * baseColor * diffuseIntensity;
+                color *= attenuation;
+                diffuseColor += color;
                 break;
             }
             case Spot: {
