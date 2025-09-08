@@ -5,46 +5,44 @@
 //  Created by Milton Montiel on 29/08/25.
 //
 
+import Foundation
 import MetalKit
 
 class ProtoRenderer: NSObject {
-    static var device: MTLDevice!
-    static var commandQueue: MTLCommandQueue!
-    static var library: MTLLibrary!
+    static var device: MTLDevice! = {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            fatalError("Metal is not supported on this device.")
+        }
+        return device
+    }()
+
+    static var commandQueue: MTLCommandQueue! = {
+        guard let commandQueue = device.makeCommandQueue() else {
+            fatalError("Could not create command queue.")
+        }
+        return commandQueue
+    }()
+
+    static var library: MTLLibrary! = {
+        return device.makeDefaultLibrary()
+    }()
 
     // MARK: - Render passes
     var forwardPass: ForwardPass
 
     // Uniforms
     var uniforms = Uniforms()
-    
+
     var lastTime: Double = CFAbsoluteTimeGetCurrent()
-    
+
     init(metalView: MTKView) {
-        guard
-            let device = MTLCreateSystemDefaultDevice(),
-            let commandQueue = device.makeCommandQueue()
-        else {
-            fatalError("Metal is not supported on this device.")
-        }
-
-        Self.device = device
-        Self.commandQueue = commandQueue
-        metalView.device = device
-
-        // MARK: - Shader function library creation
-        let library = device.makeDefaultLibrary()
-        Self.library = library
-
+        metalView.device = Self.device
+        
+        // MARK: - Render pass initialization.
         forwardPass = ForwardPass(view: metalView)
 
         super.init()
-        metalView.clearColor = MTLClearColor(
-            red: 0.05,
-            green: 0.1,
-            blue: 0.16,
-            alpha: 1
-        )
+
         metalView.depthStencilPixelFormat = .depth32Float
         mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
     }
@@ -82,8 +80,7 @@ extension ProtoRenderer {
         else { return }
 
         updateUniforms(scene: scene)
-        
-        
+
         // MARK: - Render passes
         forwardPass.descriptor = descriptor
         forwardPass.draw(
@@ -92,7 +89,7 @@ extension ProtoRenderer {
             uniforms: uniforms
         )
 
-        // MARK: - ?
+        // MARK: - Presenting to a drawable
         guard let drawable = view.currentDrawable else {
             return
         }

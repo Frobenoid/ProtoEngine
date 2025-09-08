@@ -21,16 +21,6 @@ protocol RenderPass {
 }
 
 extension RenderPass {
-    static func buildDepthStencilState() -> MTLDepthStencilState? {
-        let descriptor = MTLDepthStencilDescriptor()
-        descriptor.depthCompareFunction = .less
-        descriptor.isDepthWriteEnabled = true
-
-        return ProtoRenderer.device.makeDepthStencilState(
-            descriptor: descriptor
-        )
-    }
-
     static func makeTexture(
         size: CGSize,
         pixelFormat: MTLPixelFormat,
@@ -53,7 +43,7 @@ extension RenderPass {
         textureDesc.usage = usage
 
         guard
-            let texture = ProtoRenderer.device.makeTexture(
+            let texture = ProtoRenderer.device?.makeTexture(
                 descriptor: textureDesc
             )
         else {

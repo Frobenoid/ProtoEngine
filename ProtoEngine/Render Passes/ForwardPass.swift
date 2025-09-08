@@ -18,7 +18,7 @@ struct ForwardPass: RenderPass {
         pipelineState = PipelinesStates.createForwardPSO(
             colorPixelFormat: view.colorPixelFormat
         )
-        depthStencilState = Self.buildDepthStencilState()
+        depthStencilState = ProtoRenderer.buildDepthStencilState()
     }
 
     mutating func resize(view: MTKView, size: CGSize) {
