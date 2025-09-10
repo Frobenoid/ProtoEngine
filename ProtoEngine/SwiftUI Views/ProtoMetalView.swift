@@ -11,11 +11,13 @@ import SwiftUI
 struct ProtoMetalView: View {
     @State private var metalView = MTKView()
     @State private var controller: ProtoController?
+    @Environment(ProtoScene.self) var scene
 
     var body: some View {
+        @Bindable var scene = scene
         ProtoMetalViewRepresentable(metalView: $metalView)
             .onAppear {
-                controller = ProtoController(metalView: metalView)
+                controller = ProtoController(metalView: metalView, scene: $scene)
             }
     }
 }

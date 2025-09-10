@@ -6,16 +6,17 @@
 //
 
 import MetalKit
+import SwiftUI
 
 class ProtoController: NSObject {
-    var scene: ProtoScene
     var renderer: ProtoRenderer
+    var scene: Bindable<ProtoScene>
 
     var lastTime: Double = CFAbsoluteTime()
 
-    init(metalView: MTKView) {
+    init(metalView: MTKView, scene: Bindable<ProtoScene>) {
         renderer = ProtoRenderer(metalView: metalView)
-        scene = ProtoScene()
+        self.scene = scene
         super.init()
         metalView.delegate = self
         mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
@@ -26,7 +27,7 @@ extension ProtoController: MTKViewDelegate {
     /// Passes down view information to the scene and the renderer. This function is called
     /// on view change.lastTime
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        scene.update(size: size)
+        scene.wrappedValue.update(size: size)
         renderer.mtkView(view, drawableSizeWillChange: size)
     }
 
@@ -36,9 +37,9 @@ extension ProtoController: MTKViewDelegate {
         let currentTime = CFAbsoluteTimeGetCurrent()
         let deltaTime = Float(currentTime - lastTime)
         lastTime = currentTime
-        scene.update(deltaTime: deltaTime)
-        
-        renderer.draw(scene: scene, in: view)
+        scene.wrappedValue.update(deltaTime: deltaTime)
+
+        renderer.draw(scene: scene.wrappedValue, in: view)
     }
 
 }
