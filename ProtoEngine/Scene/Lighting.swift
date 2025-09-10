@@ -43,8 +43,8 @@ struct Lighting {
     var lights: [Light] = []
 
     init() {
-        lights.append(sunlight)
         lights.append(ambientLight)
+        lights.append(sunlight)
         lights.append(redLight)
         lights.append(spotLight)
     }
