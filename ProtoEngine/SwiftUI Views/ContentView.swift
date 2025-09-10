@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var scene = ProtoScene()
+
     var body: some View {
         VStack {
-            ProtoMetalView()
+            ProtoMetalView().environment(scene)
+            Button("Test") {
+                $scene.wrappedValue.lighting.ambientLight.color = .random(in: 0...1)
+                print(scene.lighting.ambientLight.color)
+            }
         }
     }
 }
