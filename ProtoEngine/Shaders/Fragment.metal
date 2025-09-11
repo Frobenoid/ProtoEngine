@@ -31,7 +31,7 @@ fragment float4 fragment_main(
     }
     
     float3 normalDirection = normalize(in.worldNormal);
-    float3 color = phongLightint(normalDirection, in.worldPosition, params, lights, material.baseColor);
+    float3 color = phongLighting(normalDirection, in.worldPosition, params, lights, material.baseColor);
     
     return float4(color, 1);
 }

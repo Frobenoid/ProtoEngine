@@ -11,11 +11,14 @@ struct ContentView: View {
     @State private var scene = ProtoScene()
 
     var body: some View {
-        VStack {
+        ZStack {
             ProtoMetalView().environment(scene)
-            Button("Test") {
-                $scene.wrappedValue.lighting.ambientLight.color = .random(in: 0...1)
-                print(scene.lighting.ambientLight.color)
+            HStack {
+                Spacer()
+                VStack {
+                    Spacer()
+                    LightMenu(light: $scene.lighting.lights[AmbientLight.index])
+                }
             }
         }
     }

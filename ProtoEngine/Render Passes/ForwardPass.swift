@@ -46,8 +46,8 @@ struct ForwardPass: RenderPass {
 
         // MARK: - Light rendering.
         var lights: [Light] = scene.lighting.lights
-        // Updating lights
-        lights[AmbientLight.index] = scene.lighting.ambientLight
+//        // Updating lights
+//        lights[AmbientLight.index] = scene.lighting.ambientLight
 
         renderEncoder.setFragmentBytes(
             &lights,
