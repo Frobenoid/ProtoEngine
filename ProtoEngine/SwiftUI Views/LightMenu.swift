@@ -34,7 +34,15 @@ struct LightMenu: View {
                             z: Float(components[2])
                         )
                     }
-                )
+
+                ).onAppear {
+                    color = CGColor(
+                        red: CGFloat(light.color.x),
+                        green: CGFloat(light.color.y),
+                        blue: CGFloat(light.color.z),
+                        alpha: 1
+                    )
+                }
                 Spacer()
             }
         }.padding(10)
