@@ -14,10 +14,10 @@ struct LightMenu: View {
 
     var body: some View {
         VStack {
-
-            Text("Ambient Light Settings").font(.title)
+            Text("Lighting Settings").font(.title)
+            Divider()
+            Text("Ambient Light").font(.title2)
             HStack {
-
                 ColorPicker("Color", selection: $color).onChange(
                     of: color,
                     {
@@ -45,39 +45,18 @@ struct LightMenu: View {
                 }
                 Spacer()
             }
+            Divider()
+            Text("Debugging Options").font(.title2)
+            
+            
         }.padding(10)
             .frame(width: 300)
+            .background()
+            .cornerRadius(10)
     }
 }
 
 #Preview {
     @Previewable @State var light = Lighting.buildDefaultLight()
     LightMenu(light: $light)
-}
-
-extension Color {
-    func toFloat3() -> float3? {
-        guard let cgColor = self.cgColor else {
-            return nil
-        }
-
-        // Convet to the sRGB color space
-        let sRGBColor = cgColor.converted(
-            to: CGColorSpaceCreateDeviceRGB(),
-            intent: .relativeColorimetric,
-            options: nil
-        )
-
-        guard let components = sRGBColor?.components,
-            components.count >= 3
-        else {
-            return nil
-        }
-
-        let red = Float(components[0])
-        let green = Float(components[1])
-        let blue = Float(components[2])
-
-        return float3(red, green, blue)
-    }
 }

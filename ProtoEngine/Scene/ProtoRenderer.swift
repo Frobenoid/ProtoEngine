@@ -42,6 +42,13 @@ class ProtoRenderer: NSObject {
         // MARK: - Render pass initialization.
         forwardPass = ForwardPass(view: metalView)
 
+        metalView.clearColor = MTLClearColor(
+            red: 0.86,
+            green: 0.86,
+            blue: 0.96,
+            alpha: 1
+        )
+
         super.init()
 
         metalView.depthStencilPixelFormat = .depth32Float

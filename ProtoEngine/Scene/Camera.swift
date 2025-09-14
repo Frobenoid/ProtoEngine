@@ -6,6 +6,10 @@
 //
 import CoreGraphics
 
+enum CameraType {
+    case FirstPerson, Player, ArcBall
+}
+
 protocol Camera: Transformable {
     var projectionMatrix: float4x4 { get }
     var viewMatrix: float4x4 { get }
