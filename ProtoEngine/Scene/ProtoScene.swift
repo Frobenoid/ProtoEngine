@@ -25,6 +25,7 @@ class ProtoScene {
 
     func update(size: CGSize) {
         camera.update(size: size)
+        camera.currentViewSize = size
     }
 
     func update(deltaTime: Float) {
@@ -57,7 +58,10 @@ class ProtoScene {
             }
         }()
 
-        newCamera.transform = defaultView
+        newCamera.transform.position = self.camera.transform.position
+        newCamera.currentViewSize = self.camera.currentViewSize
         self.camera = newCamera
+
+        self.update(size: self.camera.currentViewSize)
     }
 }

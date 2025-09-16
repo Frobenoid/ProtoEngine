@@ -15,9 +15,12 @@ protocol Camera: Transformable {
     var viewMatrix: float4x4 { get }
     mutating func update(size: CGSize)
     mutating func update(deltaTime: Float)
+
+    var currentViewSize: CGSize { get set }
 }
 
 struct FPCamera: Camera, Movement {
+    var currentViewSize: CGSize = .zero
     var transform = Transform()
     var aspect: Float = 1.0
     var fov = Float(70).degreesToRadians
@@ -48,6 +51,7 @@ struct FPCamera: Camera, Movement {
 }
 
 struct ArcballCamera: Camera {
+    var currentViewSize: CGSize = .zero
     var transform = Transform()
     var aspect: Float = 1.0
     var fov = Float(70).degreesToRadians
@@ -109,6 +113,7 @@ struct ArcballCamera: Camera {
 }
 
 struct PlayerCamera: Camera, Movement {
+    var currentViewSize: CGSize = .zero
     var transform = Transform()
     var aspect: Float = 1.0
     var fov = Float(70).degreesToRadians
