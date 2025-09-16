@@ -9,18 +9,85 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var scene = ProtoScene()
+    @State private var showLightMenu: Bool = false
+    @State private var showCameraMenu: Bool = false
+    @State private var cameraType: CameraType = .FirstPerson
 
     var body: some View {
-        VStack {
+        ZStack {
             ProtoMetalView().environment(scene)
-            Button("Test") {
-                $scene.wrappedValue.lighting.ambientLight.color = .random(in: 0...1)
-                print(scene.lighting.ambientLight.color)
+            HStack {
+                Spacer()
+                VStack {
+                    Spacer()
+                    VStack {
+
+                        VStack {
+                            if showLightMenu {
+                                LightMenu(
+                                    light: $scene.lighting.lights[
+                                        AmbientLight.index
+                                    ]
+                                ).transition(.opacity)
+                            }
+
+                            if showCameraMenu {
+                                CameraSettingMenu(cameraType: $cameraType)
+                                    .onChange(of: cameraType) {
+                                        scene.setCameraType(
+                                            to: cameraType
+                                        )
+
+                                    }.transition(.opacity)
+                            }
+                        }
+
+                        HStack {
+                            Spacer()
+                            MenuBar(
+                                lightMenuIsActive: $showLightMenu,
+                                cameraSettingsIsActive: $showCameraMenu
+                            )
+                        }
+                    }
+                    .frame(width: 300)
+                    .padding(10)
+                }
             }
         }
     }
 }
 
+struct MenuBar: View {
+    @Binding var lightMenuIsActive: Bool
+    @Binding var cameraSettingsIsActive: Bool
+
+    var body: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    cameraSettingsIsActive.toggle()
+                }
+            } label: {
+                Label("Camera", systemImage: "camera.circle").font(.title)
+                    .labelStyle(.iconOnly)
+                    .padding(9)
+
+            }.background().cornerRadius(10)
+
+            Button {
+                withAnimation {
+                    lightMenuIsActive.toggle()
+                }
+            } label: {
+                Label("Lighting", systemImage: "lightbulb.max").font(.title)
+                    .labelStyle(.iconOnly)
+                    .padding(5)
+            }.background().cornerRadius(10)
+
+        }
+    }
+}
 #Preview {
     ContentView()
 }

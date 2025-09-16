@@ -9,7 +9,7 @@
 using namespace metal;
 #import "Lighting.h"
 
-float3 phongLightint(float3 normal, float3 position, constant Params &params,
+float3 phongLighting(float3 normal, float3 position, constant Params &params,
                      constant Light *lights, float3 baseColor) {
     float materialShininess = 32;
     float3 materialSpecularColor = float3(1,1,1);

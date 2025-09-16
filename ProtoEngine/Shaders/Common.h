@@ -25,7 +25,7 @@ typedef struct {
     /// the number of elements in an array.
     uint lightCount;
     vec3 cameraPosition;
-    
+
     uint32_t width;
     uint32_t height;
     uint32_t tiling;
@@ -73,6 +73,10 @@ typedef enum {
     Point = 3,
     Ambient = 4
 } LightType;
+
+typedef enum {
+    AmbientLight = 0, 
+} LightIndex;
 
 typedef struct {
     LightType type;

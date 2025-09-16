@@ -25,7 +25,7 @@ class ProtoController: NSObject {
 
 extension ProtoController: MTKViewDelegate {
     /// Passes down view information to the scene and the renderer. This function is called
-    /// on view change.lastTime
+    /// on view change.
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         scene.wrappedValue.update(size: size)
         renderer.mtkView(view, drawableSizeWillChange: size)

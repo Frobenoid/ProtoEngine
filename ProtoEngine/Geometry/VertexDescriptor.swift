@@ -94,3 +94,9 @@ extension TextureIndices {
         return Int(self.rawValue)
     }
 }
+
+extension LightIndex {
+    var index: Int {
+        return Int(self.rawValue)
+    }
+}

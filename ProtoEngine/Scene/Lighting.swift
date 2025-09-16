@@ -42,9 +42,10 @@ struct Lighting {
 
     var lights: [Light] = []
 
+    /// Ambient light should always be at AmbientLight.index.
     init() {
-        lights.append(sunlight)
         lights.append(ambientLight)
+        lights.append(sunlight)
         lights.append(redLight)
         lights.append(spotLight)
     }
