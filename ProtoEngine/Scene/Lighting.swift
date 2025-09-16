@@ -46,7 +46,7 @@ struct Lighting {
     init() {
         lights.append(ambientLight)
         lights.append(sunlight)
-        lights.append(redLight)
+//        lights.append(redLight)
         lights.append(spotLight)
     }
 

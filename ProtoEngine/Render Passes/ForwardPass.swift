@@ -62,6 +62,38 @@ struct ForwardPass: RenderPass {
             )
         }
 
+        // MARK: - Light debug rendering.
+        if scene.showDebugLights {
+            for light in scene.lighting.lights {
+                lightingDebugDraw(
+                    light: light,
+                    encoder: renderEncoder,
+                    uniforms: uniforms,
+                    params: params
+                )
+            }
+        }
+
         renderEncoder.endEncoding()
     }
+
+    func lightingDebugDraw(
+        light: Light,
+        encoder: MTLRenderCommandEncoder,
+        uniforms: Uniforms,
+        params: Params
+    ) {
+        if light.type.rawValue == 2 {
+            var sphere = Model(name: "Sphere", primitiveType: .sphere)
+            sphere.transform.position = light.position
+            sphere.scale *= 0.1
+
+            sphere.render(
+                encoder: encoder,
+                uniforms: uniforms,
+                params: params
+            )
+        }
+    }
+
 }

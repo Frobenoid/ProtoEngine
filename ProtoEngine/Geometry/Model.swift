@@ -53,7 +53,6 @@ class Model: Transformable {
         meshes = zip(mdlMeshes, mtkMeshes).map {
             Mesh(mdlMesh: $0.0, mtkMesh: $0.1)
         }
-        
         self.name = name
     }
 }

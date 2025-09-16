@@ -17,6 +17,8 @@ class ProtoScene {
     var model: Model = Model(name: "gizmo.usdc")
     var axo: Model = Model(name: "Axo.usdz")
     var axo2 = Model(name: "Axo_2.usdz")
+    
+    var showDebugLights: Bool = false
 
     var defaultView: Transform {
         Transform(

@@ -11,6 +11,7 @@ import simd
 struct LightMenu: View {
     @Binding var light: Light
     @State var color: CGColor = .white
+    @Binding var debugLights: Bool
 
     var body: some View {
         VStack {
@@ -47,8 +48,8 @@ struct LightMenu: View {
             }
             Divider()
             Text("Debugging Options").font(.title2)
-            
-            
+            Toggle("Show Lights", isOn: $debugLights).toggleStyle(.switch)
+
         }.padding(10)
             .frame(width: 300)
             .background()
@@ -58,5 +59,6 @@ struct LightMenu: View {
 
 #Preview {
     @Previewable @State var light = Lighting.buildDefaultLight()
-    LightMenu(light: $light)
+    @Previewable @State var debugLights: Bool = false
+    LightMenu(light: $light, debugLights: $debugLights)
 }

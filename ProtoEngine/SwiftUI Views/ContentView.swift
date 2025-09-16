@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var showLightMenu: Bool = false
     @State private var showCameraMenu: Bool = false
     @State private var cameraType: CameraType = .FirstPerson
+    @State private var debugLights: Bool = false
 
     var body: some View {
         ZStack {
@@ -27,7 +28,8 @@ struct ContentView: View {
                                 LightMenu(
                                     light: $scene.lighting.lights[
                                         AmbientLight.index
-                                    ]
+                                    ],
+                                    debugLights: $scene.showDebugLights
                                 ).transition(.opacity)
                             }
 
