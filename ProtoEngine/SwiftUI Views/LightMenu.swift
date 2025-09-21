@@ -15,37 +15,7 @@ struct LightMenu: View {
 
     var body: some View {
         VStack {
-            Text("Lighting Settings").font(.title)
-            Divider()
-            Text("Ambient Light").font(.title2)
-            HStack {
-                ColorPicker("Color", selection: $color).onChange(
-                    of: color,
-                    {
-
-                        guard let components = color.components,
-                            components.count >= 3
-                        else {
-                            return
-                        }
-
-                        light.color = float3(
-                            x: Float(components[0]),
-                            y: Float(components[1]),
-                            z: Float(components[2])
-                        )
-                    }
-
-                ).onAppear {
-                    color = CGColor(
-                        red: CGFloat(light.color.x),
-                        green: CGFloat(light.color.y),
-                        blue: CGFloat(light.color.z),
-                        alpha: 1
-                    )
-                }
-                Spacer()
-            }
+            Text("Lighting").font(.title)
             Divider()
             Text("Debugging Options").font(.title2)
             Toggle("Show Lights", isOn: $debugLights).toggleStyle(.switch)

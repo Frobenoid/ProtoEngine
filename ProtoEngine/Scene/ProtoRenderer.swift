@@ -29,6 +29,7 @@ class ProtoRenderer: NSObject {
 
     // MARK: - Render passes
     var forwardPass: ForwardPass
+    var wireframePass: WireframePass
 
     // Uniforms
     var uniforms = Uniforms()
@@ -41,6 +42,7 @@ class ProtoRenderer: NSObject {
 
         // MARK: - Render pass initialization.
         forwardPass = ForwardPass(view: metalView)
+        wireframePass = WireframePass(view: metalView)
 
         metalView.clearColor = MTLClearColor(
             red: 0.86,
@@ -92,6 +94,14 @@ extension ProtoRenderer {
         updateUniforms(scene: scene)
 
         // MARK: - Render passes
+        wireframePass.descriptor = descriptor
+        wireframePass.draw(
+            commandBuffer: commandBuffer,
+            scene: scene,
+            uniforms: uniforms,
+            params: params
+        )
+        
         forwardPass.descriptor = descriptor
         forwardPass.draw(
             commandBuffer: commandBuffer,

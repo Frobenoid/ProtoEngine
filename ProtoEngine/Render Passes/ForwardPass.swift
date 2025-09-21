@@ -91,7 +91,8 @@ struct ForwardPass: RenderPass {
             sphere.render(
                 encoder: encoder,
                 uniforms: uniforms,
-                params: params
+                params: params,
+                primitiveType: .line
             )
         }
     }

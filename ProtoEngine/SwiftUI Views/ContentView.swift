@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+struct ActiveMenus {
+    var showLightMenu: Bool = false
+    var showCameraMenu: Bool = false
+    var showWorldMenu: Bool = false
+}
+
 struct ContentView: View {
     @State private var scene = ProtoScene()
-    @State private var showLightMenu: Bool = false
-    @State private var showCameraMenu: Bool = false
+    @State private var activeMenus = ActiveMenus()
     @State private var cameraType: CameraType = .FirstPerson
     @State private var debugLights: Bool = false
 
@@ -22,9 +27,8 @@ struct ContentView: View {
                 VStack {
                     Spacer()
                     VStack {
-
                         VStack {
-                            if showLightMenu {
+                            if activeMenus.showLightMenu {
                                 LightMenu(
                                     light: $scene.lighting.lights[
                                         AmbientLight.index
@@ -32,8 +36,7 @@ struct ContentView: View {
                                     debugLights: $scene.showDebugLights
                                 ).transition(.opacity)
                             }
-
-                            if showCameraMenu {
+                            if activeMenus.showCameraMenu {
                                 CameraSettingMenu(cameraType: $cameraType)
                                     .onChange(of: cameraType) {
                                         scene.setCameraType(
@@ -42,13 +45,21 @@ struct ContentView: View {
 
                                     }.transition(.opacity)
                             }
+                            if activeMenus.showWorldMenu {
+                                WorldSettingsMenu(
+                                    light: $scene.lighting.lights[
+                                        AmbientLight.index
+                                    ]
+                                )
+                            }
                         }
-
                         HStack {
                             Spacer()
                             MenuBar(
-                                lightMenuIsActive: $showLightMenu,
-                                cameraSettingsIsActive: $showCameraMenu
+                                lightMenuIsActive: $activeMenus.showLightMenu,
+                                cameraSettingsIsActive: $activeMenus
+                                    .showCameraMenu,
+                                worldMenuIsActive: $activeMenus.showWorldMenu
                             )
                         }
                     }
@@ -63,6 +74,7 @@ struct ContentView: View {
 struct MenuBar: View {
     @Binding var lightMenuIsActive: Bool
     @Binding var cameraSettingsIsActive: Bool
+    @Binding var worldMenuIsActive: Bool
 
     var body: some View {
         HStack {
@@ -87,6 +99,15 @@ struct MenuBar: View {
                     .padding(5)
             }.background().cornerRadius(10)
 
+            Button {
+                withAnimation {
+                    worldMenuIsActive.toggle()
+                }
+            } label: {
+                Label("Lighting", systemImage: "globe").font(.title)
+                    .labelStyle(.iconOnly)
+                    .padding(9)
+            }.background().cornerRadius(10)
         }
     }
 }

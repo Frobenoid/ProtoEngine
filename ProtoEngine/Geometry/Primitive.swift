@@ -25,7 +25,7 @@ extension Model {
         case .sphere:
             return MDLMesh(
                 sphereWithExtent: [1, 1, 1],
-                segments: [30, 30],
+                segments: [10, 10],
                 inwardNormals: false,
                 geometryType: .triangles,
                 allocator: allocator

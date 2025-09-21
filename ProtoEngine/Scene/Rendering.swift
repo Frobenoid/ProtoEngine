@@ -10,7 +10,8 @@ extension Model {
     func render(
         encoder: MTLRenderCommandEncoder,
         uniforms: Uniforms,
-        params: Params
+        params: Params,
+        primitiveType: MTLPrimitiveType = .triangle
     ) {
 
         var uniforms = uniforms
@@ -69,7 +70,7 @@ extension Model {
                 )
 
                 encoder.drawIndexedPrimitives(
-                    type: .triangle,
+                    type: primitiveType,
                     indexCount: submesh.indexCount,
                     indexType: submesh.indexType,
                     indexBuffer: submesh.indexBuffer,
