@@ -8,20 +8,17 @@
 import SwiftUI
 import QGraph
 
-//Text("Graph with \(graph.num_of_nodes()) nodes")
-//Button("Add node") {
-//    graph.add_node(T: qgraph.ConstantNode.self)
-//}
 struct NodeMenu: View {
-    @Binding var graph: qgraph.Graph
+    @Environment(Graph.self) var graph
+    
     var body: some View {
         VStack {
             Text("Nodes").font(.title)
-            Text("Graph with \(graph.num_of_nodes()) nodes").font(.subheadline)
+            Text("Graph with \(graph.nodes.count) nodes").font(.subheadline)
             Divider()
             Text("").font(.title2)
             Button("Add constant node") {
-                graph.add_node(T: qgraph.ConstantNode.self)
+                graph.addNode(MathNode())
             }
         }.padding(10)
             .frame(width: 300)
@@ -31,6 +28,6 @@ struct NodeMenu: View {
 }
 
 #Preview {
-    @Previewable @State var graph = qgraph.Graph()
-    NodeMenu(graph: $graph)
+    @Previewable @State var graph = Graph()
+    NodeMenu().environment(graph)
 }

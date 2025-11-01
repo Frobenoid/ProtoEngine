@@ -5,8 +5,8 @@
 //  Created by Milton Montiel on 29/08/25.
 //
 
-import SwiftUI
 import QGraph
+import SwiftUI
 
 struct ActiveMenus {
     var showLightMenu: Bool = false
@@ -20,11 +20,17 @@ struct ContentView: View {
     @State private var activeMenus = ActiveMenus()
     @State private var cameraType: CameraType = .FirstPerson
     @State private var debugLights: Bool = false
-    @State private var graph = qgraph.Graph()
-    
+    @State private var graph = Graph()
+
     var body: some View {
         ZStack {
-            ProtoMetalView().environment(scene)
+            ProtoMetalView().environment(scene).allowsHitTesting(true)
+            ScrollView([.horizontal, .vertical]) {
+                NodeCanvas(graph: $graph)
+                    .frame(width: 10000, height: 10000)
+                    .allowsHitTesting(true)
+            }
+            .defaultScrollAnchor(UnitPoint(x: 0.5, y: 0.5))
             HStack {
                 Spacer()
                 VStack {
@@ -32,7 +38,9 @@ struct ContentView: View {
                     VStack {
                         VStack {
                             if activeMenus.showNodeMenu {
-                                NodeMenu(graph:$graph).transition(.opacity)
+                                NodeMenu().environment(graph).transition(
+                                    .opacity
+                                )
                             }
                             if activeMenus.showLightMenu {
                                 LightMenu(
