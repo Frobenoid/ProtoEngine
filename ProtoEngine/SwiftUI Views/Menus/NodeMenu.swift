@@ -18,6 +18,9 @@ struct NodeMenu: View {
             Divider()
             Text("").font(.title2)
             Button("Add constant node") {
+                graph.addNode(ConstantNode())
+            }
+            Button("Add math node") {
                 graph.addNode(MathNode())
             }
         }.padding(10)

@@ -13,10 +13,10 @@ struct NodeCanvas: View {
     @Binding var graph: Graph
 
     var body: some View {
-        Text("Currently \(graph.nodes.count) nodes")
-
-        ForEach(graph.nodes) { node in
-            Text("\(node.id)")
+        ZStack {
+            ForEach($graph.nodes, id: \.id!) { node in
+                NodeView(node: node)
+            }
         }
     }
 }
