@@ -21,26 +21,6 @@ struct CameraSettingMenu: View {
                     Text("Player").tag(CameraType.Player)
                     Text("First Person").tag(CameraType.FirstPerson)
                 }.pickerStyle(.segmented)
-//            Menu {
-//                Button {
-//                    cameraType = .ArcBall
-//                } label: {
-//                    Text("Arcball Camera")
-//                }
-//                Button {
-//                    cameraType = .FirstPerson
-//                } label: {
-//                    Text("First Person")
-//                }
-//                Button {
-//                    cameraType = .Player
-//                } label: {
-//                    Text("Player")
-//                }
-//            } label: {
-//                Label("Camera type", systemImage: "camera.aperture")
-//            }.menuStyle(.borderedButton)
-//
         }
         .padding(10)
         .frame(width: 300)

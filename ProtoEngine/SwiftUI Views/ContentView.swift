@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import QGraph
 
 struct ActiveMenus {
     var showLightMenu: Bool = false
     var showCameraMenu: Bool = false
     var showWorldMenu: Bool = false
+    var showNodeMenu: Bool = false
 }
 
 struct ContentView: View {
@@ -18,7 +20,8 @@ struct ContentView: View {
     @State private var activeMenus = ActiveMenus()
     @State private var cameraType: CameraType = .FirstPerson
     @State private var debugLights: Bool = false
-
+    @State private var graph = qgraph.Graph()
+    
     var body: some View {
         ZStack {
             ProtoMetalView().environment(scene)
@@ -28,6 +31,9 @@ struct ContentView: View {
                     Spacer()
                     VStack {
                         VStack {
+                            if activeMenus.showNodeMenu {
+                                NodeMenu(graph:$graph).transition(.opacity)
+                            }
                             if activeMenus.showLightMenu {
                                 LightMenu(
                                     light: $scene.lighting.lights[
@@ -56,10 +62,7 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             MenuBar(
-                                lightMenuIsActive: $activeMenus.showLightMenu,
-                                cameraSettingsIsActive: $activeMenus
-                                    .showCameraMenu,
-                                worldMenuIsActive: $activeMenus.showWorldMenu
+                                activeMenus: $activeMenus
                             )
                         }
                     }
@@ -71,46 +74,6 @@ struct ContentView: View {
     }
 }
 
-struct MenuBar: View {
-    @Binding var lightMenuIsActive: Bool
-    @Binding var cameraSettingsIsActive: Bool
-    @Binding var worldMenuIsActive: Bool
-
-    var body: some View {
-        HStack {
-            Button {
-                withAnimation {
-                    cameraSettingsIsActive.toggle()
-                }
-            } label: {
-                Label("Camera", systemImage: "camera.circle").font(.title)
-                    .labelStyle(.iconOnly)
-                    .padding(9)
-
-            }.background().cornerRadius(10)
-
-            Button {
-                withAnimation {
-                    lightMenuIsActive.toggle()
-                }
-            } label: {
-                Label("Lighting", systemImage: "lightbulb.max").font(.title)
-                    .labelStyle(.iconOnly)
-                    .padding(5)
-            }.background().cornerRadius(10)
-
-            Button {
-                withAnimation {
-                    worldMenuIsActive.toggle()
-                }
-            } label: {
-                Label("Lighting", systemImage: "globe").font(.title)
-                    .labelStyle(.iconOnly)
-                    .padding(9)
-            }.background().cornerRadius(10)
-        }
-    }
-}
 #Preview {
     ContentView()
 }

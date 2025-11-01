@@ -1,0 +1,3 @@
+[submodule "QGraph"]
+	path = QGraph
+	url = https://github.com/Frobenoid/QGraph

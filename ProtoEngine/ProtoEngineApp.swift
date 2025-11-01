@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import QGraph
 
 @main
 struct ProtoEngineApp: App {
