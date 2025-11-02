@@ -27,7 +27,8 @@ protocol Socket {
     mutating func untypedCurrentValue() -> Any
 
     func getNeighbors() -> Set<Link>
-    func connect(to: NodeID, atInput: SocketID)
+    // TODO: Remove the parentNode parameter and set a parentID prop to each socket. 
+    func connect(parentNode: NodeID, to: NodeID, atInput: SocketID)
     func disconnect(link: Link)
 }
 
@@ -54,7 +55,7 @@ class InSocket<T>: Socket {
         self.defaultValue = defaultValue
     }
 
-    func connect(to: NodeID, atInput: SocketID) {
+    func connect(parentNode: NodeID, to: NodeID, atInput: SocketID) {
         print("CALLED CONNECT ON AN INPUT SOCKET")
     }
 
@@ -83,10 +84,10 @@ class OutSocket<T>: Socket {
         return neighbors
     }
 
-    func connect(to: NodeID, atInput: SocketID) {
+    func connect(parentNode: NodeID, to: NodeID, atInput: SocketID) {
         neighbors.insert(
             Link(
-                sourceNode: 0,
+                sourceNode: parentNode,
                 sourceSocket: id!,
                 destinationNode: to,
                 destinationSocket: atInput
@@ -95,6 +96,7 @@ class OutSocket<T>: Socket {
     }
 
     func disconnect(link: Link) {
+        print("Removing \(link), from \(neighbors)")
         neighbors.remove(link)
     }
 

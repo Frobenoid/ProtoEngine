@@ -25,7 +25,6 @@ extension CGSize {
 struct NodeCanvas: View {
 
     @Environment(Graph.self) var graph: Graph
-    @State private var needsRedraw: Bool = false
 
     var body: some View {
         GeometryReader { geo in
@@ -66,24 +65,12 @@ struct NodeCanvas: View {
 
                         path
                             .stroke(
-                                Color.gray.opacity(0.4),
+                                Color.black.opacity(0.8),
                                 style: StrokeStyle(
-                                    lineWidth: 6,
+                                    lineWidth: 5,
                                     lineCap: .round,
-                                    dash: [10, 10],
-                                    dashPhase: 5
-                                )
-                            )
-                            .background(
-                                path.stroke(
-                                    Color.black.opacity(0.9),
-                                    style: StrokeStyle(
-                                        lineWidth: 3,
-                                        lineCap: .round,
-                                        lineJoin: .bevel,
-                                        dash: [10, 10],
-                                        dashPhase: 15
-                                    )
+                                    lineJoin: .round,
+                                    dash: [1, 10, 5],
                                 )
                             )
                             .contentShape(
@@ -92,7 +79,6 @@ struct NodeCanvas: View {
                             .gesture(
                                 TapGesture(count: 2).onEnded({
                                     _ in
-                                    self.needsRedraw.toggle()
                                     self.graph.disconnect(link: link)
                                     print("Deleted link(\(link))")
                                 })

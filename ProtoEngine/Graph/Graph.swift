@@ -45,7 +45,7 @@ class Graph {
     ) {
         nodes[from]
             .outputs[atOutput]
-            .connect(to: to, atInput: atInput)
+            .connect(parentNode: from, to: to, atInput: atInput)
         updateLinks()
     }
 
@@ -66,6 +66,7 @@ class Graph {
             }
         }
         links = t
+        print(links)
     }
 }
 
