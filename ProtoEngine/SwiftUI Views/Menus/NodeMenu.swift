@@ -11,7 +11,7 @@ import SwiftUI
 struct NodeMenu: View {
     @Environment(Graph.self) var graph
     @Binding var showNodes: Bool
-
+    
     var body: some View {
         VStack {
             Text("Nodes").font(.title)

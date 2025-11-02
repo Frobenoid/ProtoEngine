@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var hitTestEnable = true
     @State private var showNodes: Bool = true
+    //    @State private var evaluator: Graph.Evaluator
 
     var body: some View {
         ZStack {
@@ -36,6 +37,7 @@ struct ContentView: View {
                     .environment(graph)
             }
             .opacity(showNodes ? 1 : 0)
+            .transition(.opacity)
             .defaultScrollAnchor(UnitPoint(x: 0.5, y: 0.5))
             .onScrollGeometryChange(for: CGPoint.self) {
                 geo in
@@ -53,55 +55,13 @@ struct ContentView: View {
                 new in
                 self.hitTestEnable = !new.isScrolling
             }
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-                    VStack {
-                        VStack {
-                            if activeMenus.showNodeMenu {
-                                NodeMenu(showNodes: $showNodes).environment(
-                                    graph
-                                ).transition(
-                                    .opacity
-                                )
-                            }
-                            if activeMenus.showLightMenu {
-                                LightMenu(
-                                    light: $scene.lighting.lights[
-                                        AmbientLight.index
-                                    ],
-                                    debugLights: $scene.showDebugLights
-                                ).transition(.opacity)
-                            }
-                            if activeMenus.showCameraMenu {
-                                CameraSettingMenu(cameraType: $cameraType)
-                                    .onChange(of: cameraType) {
-                                        scene.setCameraType(
-                                            to: cameraType
-                                        )
-
-                                    }.transition(.opacity)
-                            }
-                            if activeMenus.showWorldMenu {
-                                WorldSettingsMenu(
-                                    light: $scene.lighting.lights[
-                                        AmbientLight.index
-                                    ]
-                                )
-                            }
-                        }
-                        HStack {
-                            Spacer()
-                            MenuBar(
-                                activeMenus: $activeMenus
-                            )
-                        }
-                    }
-                    .frame(width: 300)
-                    .padding(10)
-                }
-            }
+            PopUpMenus(
+                activeMenus: $activeMenus,
+                showNodes: $showNodes,
+                scene: $scene,
+                cameraType: $cameraType
+            )
+            .environment(graph)
         }
     }
 }

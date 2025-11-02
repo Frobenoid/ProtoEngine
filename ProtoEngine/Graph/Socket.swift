@@ -11,7 +11,7 @@ typealias SocketID = Int
 typealias NodeID = Int
 
 struct Link: Hashable {
-    
+
     var sourceNode: NodeID
     let sourceSocket: SocketID
     let destinationNode: NodeID
@@ -24,10 +24,10 @@ protocol Socket {
     // Untyped value modifiers.
     mutating func setUntypedCurrentValue(to value: Any)
     mutating func untypedCurrentValue() -> Any
-    
-    
+
     func getNeighbors() -> Set<Link>
     func connect(to: NodeID, atInput: SocketID)
+    func disconnect(link: Link)
 }
 
 class InSocket<T>: Socket {
@@ -57,6 +57,9 @@ class InSocket<T>: Socket {
         print("CALLED CONNECT ON AN INPUT SOCKET")
     }
 
+    func disconnect(link: Link) {
+        print("CALLED DISCONNECT ON AN INPUT SOCKET")
+    }
 }
 
 class OutSocket<T>: Socket {
@@ -82,12 +85,16 @@ class OutSocket<T>: Socket {
     func connect(to: NodeID, atInput: SocketID) {
         neighbors.insert(
             Link(
-                sourceNode: 0, 
+                sourceNode: 0,
                 sourceSocket: id!,
                 destinationNode: to,
                 destinationSocket: atInput
             )
         )
+    }
+
+    func disconnect(link: Link) {
+        neighbors.remove(link)
     }
 
     init(defaultValue: T) {

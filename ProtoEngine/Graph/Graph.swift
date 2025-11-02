@@ -46,6 +46,12 @@ class Graph {
             .connect(to: to, atInput: atInput)
     }
 
+    func disconnect(
+        link: Link
+    ) {
+        nodes[link.sourceNode].outputs[link.sourceSocket].disconnect(link: link)
+    }
+
     func getLinks() -> [Link] {
         var t: [Link] = []
         for node in nodes {

@@ -37,6 +37,7 @@ struct NodeCanvas: View {
             .offset(geo.size / 2)
             .coordinateSpace(name: "graph")
             .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
+
                 let links = graph.getLinks()
 
                 ForEach(links, id: \.hashValue) { link in
@@ -63,7 +64,7 @@ struct NodeCanvas: View {
                         let start = geo[sourceAnchor]
                         let end = geo[destAnchor]
 
-                        computePath(start: start, end: end)
+                        self.computePath(start: start, end: end)
                             .strokedPath(
                                 StrokeStyle(
                                     lineWidth: 5,
@@ -73,19 +74,25 @@ struct NodeCanvas: View {
                                     dashPhase: 5
                                 )
                             )
-                            .stroke(Color.black.opacity(0.9), lineWidth: 2)
+                            .stroke(Color.black.opacity(0.9), lineWidth: 3)
                             .fill(
-                                Color.black.opacity(0.2)
+                                Color.yellow.opacity(0.4)
                             )
-                            .onTapGesture(count: 2) {
-                                print("Tried to delete link \(link)")
-                                self.needsRedraw.toggle()
+                            .onHover { _ in
+                                print("HI")
                             }
-                            //                            .stroke(Color.gray.opacity(0.9), lineWidth: 5)
+                            .gesture(
+                                TapGesture(count: 2).onEnded({
+                                    _ in
+                                    print("HI?")
+                                })
+                            )
                     }
 
                 }
             }
+            .focusable(true, interactions: .edit)
+            .focusEffectDisabled()
         }
     }
 
