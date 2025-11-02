@@ -24,6 +24,7 @@ struct ContentView: View {
 
     @State private var scrollOffset: CGPoint = .zero
     @State private var hitTestEnable = true
+    @State private var showNodes: Bool = true
 
     var body: some View {
         ZStack {
@@ -34,6 +35,7 @@ struct ContentView: View {
                     .allowsHitTesting(self.hitTestEnable)
                     .environment(graph)
             }
+            .opacity(showNodes ? 1 : 0)
             .defaultScrollAnchor(UnitPoint(x: 0.5, y: 0.5))
             .onScrollGeometryChange(for: CGPoint.self) {
                 geo in
@@ -58,7 +60,9 @@ struct ContentView: View {
                     VStack {
                         VStack {
                             if activeMenus.showNodeMenu {
-                                NodeMenu().environment(graph).transition(
+                                NodeMenu(showNodes: $showNodes).environment(
+                                    graph
+                                ).transition(
                                     .opacity
                                 )
                             }

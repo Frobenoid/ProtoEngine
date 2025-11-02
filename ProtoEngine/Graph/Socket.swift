@@ -22,9 +22,10 @@ protocol Socket {
     var id: SocketID? { get set }
 
     // Untyped value modifiers.
-    mutating func setCurrentValue(to value: Any)
+    mutating func setUntypedCurrentValue(to value: Any)
     mutating func untypedCurrentValue() -> Any
-
+    
+    
     func getNeighbors() -> Set<Link>
     func connect(to: NodeID, atInput: SocketID)
 }
@@ -35,7 +36,7 @@ class InSocket<T>: Socket {
 
     var id: SocketID?
 
-    func setCurrentValue(to value: Any) {
+    func setUntypedCurrentValue(to value: Any) {
         self.currentValue = value as! T
     }
 
@@ -66,7 +67,7 @@ class OutSocket<T>: Socket {
 
     var neighbors: Set<Link> = []
 
-    func setCurrentValue(to value: Any) {
+    func setUntypedCurrentValue(to value: Any) {
         self.currentValue = value as! T
     }
 

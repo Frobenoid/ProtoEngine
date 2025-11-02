@@ -65,7 +65,7 @@ struct NodeView: View {
                 .frame(width: 200, height: 150, alignment: .trailing)
             }.padding(.vertical, 25)
         }
-        .background(Color.black.opacity(0.9))
+        .background()
         .frame(width: 200, height: 170)
         .cornerRadius(10)
         .offset(

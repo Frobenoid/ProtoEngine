@@ -77,10 +77,11 @@ struct NodeCanvas: View {
                             .fill(
                                 Color.black.opacity(0.2)
                             )
-                            //                            .stroke(Color.gray.opacity(0.9), lineWidth: 5)
                             .onTapGesture(count: 2) {
+                                print("Tried to delete link \(link)")
                                 self.needsRedraw.toggle()
                             }
+                            //                            .stroke(Color.gray.opacity(0.9), lineWidth: 5)
                     }
 
                 }

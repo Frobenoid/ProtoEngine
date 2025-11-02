@@ -21,6 +21,10 @@ class Node {
         return inputs[Int(index)]
     }
 
+    func setUntypedInput(at index: SocketID, to: Any) {
+        inputs[index].setUntypedCurrentValue(to: to)
+    }
+
     func getUntypedOutput(at index: SocketID) -> any Socket {
         return outputs[Int(index)]
     }
@@ -44,7 +48,7 @@ class Node {
     }
 
     func setOutput(at index: SocketID, to value: Any) {
-        outputs[Int(index)].setCurrentValue(to: value)
+        outputs[Int(index)].setUntypedCurrentValue(to: value)
     }
 
     func getNeighbors() -> Set<Link> {

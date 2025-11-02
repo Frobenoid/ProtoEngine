@@ -5,12 +5,13 @@
 //  Created by Milton Montiel on 01/11/25.
 //
 
-import SwiftUI
 import QGraph
+import SwiftUI
 
 struct NodeMenu: View {
     @Environment(Graph.self) var graph
-    
+    @Binding var showNodes: Bool
+
     var body: some View {
         VStack {
             Text("Nodes").font(.title)
@@ -23,6 +24,7 @@ struct NodeMenu: View {
             Button("Add math node") {
                 graph.addNode(MathNode())
             }
+            Toggle("Show Nodes", isOn: $showNodes).toggleStyle(.switch)
         }.padding(10)
             .frame(width: 300)
             .background()
@@ -32,5 +34,6 @@ struct NodeMenu: View {
 
 #Preview {
     @Previewable @State var graph = Graph()
-    NodeMenu().environment(graph)
+    @Previewable @State var showNodes = true
+    NodeMenu(showNodes: $showNodes).environment(graph)
 }
