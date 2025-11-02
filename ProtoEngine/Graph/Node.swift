@@ -30,10 +30,12 @@ class Node {
 
     func addInput(_ socket: any Socket) {
         inputs.append(socket)
+        inputs[inputs.count - 1].id = SocketID(inputs.count - 1)
     }
 
     func addOutput(_ socket: any Socket) {
         outputs.append(socket)
+        outputs[outputs.count - 1].id = SocketID(outputs.count - 1)
     }
 
     func setOutput(at index: SocketID, to value: Any) {

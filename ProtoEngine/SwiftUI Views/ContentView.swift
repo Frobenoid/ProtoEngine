@@ -21,16 +21,36 @@ struct ContentView: View {
     @State private var cameraType: CameraType = .FirstPerson
     @State private var debugLights: Bool = false
     @State private var graph = Graph()
+    
+    @State private var scrollOffset: CGPoint = .zero
+    @State private var hitTestEnable = true
 
     var body: some View {
         ZStack {
             ProtoMetalView().environment(scene).allowsHitTesting(true)
             ScrollView([.horizontal, .vertical]) {
-                NodeCanvas(graph: $graph)
-                    .frame(width: 10000, height: 10000)
-                    .allowsHitTesting(true)
+                NodeCanvas()
+                    .frame(width: 2000, height: 2000)
+                    .allowsHitTesting(self.hitTestEnable)
+                    .environment(graph)
             }
             .defaultScrollAnchor(UnitPoint(x: 0.5, y: 0.5))
+            .onScrollGeometryChange(for: CGPoint.self) {
+                geo in
+
+                let center = CGPoint(
+                    x: geo.contentSize.width / 2,
+                    y: geo.contentSize.height / 2
+                )
+                
+                print("WFT?")
+                return center
+            } action: {oldScrollOffset, newScrollOffset in
+                self.scrollOffset = newScrollOffset
+            } .onScrollPhaseChange {
+                old, new in
+                self.hitTestEnable = !new.isScrolling
+            }
             HStack {
                 Spacer()
                 VStack {

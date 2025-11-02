@@ -25,41 +25,93 @@ extension Binding {
 }
 
 struct NodeView: View {
-    @Binding var node: Node
-
+    let node: Node
+    @Environment(Graph.self) var graph: Graph
+    
+    @State private var offset = CGSize.zero
+    @GestureState private var dragOffset: CGSize = .zero
+    @State private var isDragging = false
+    @State private var isSelected: Bool = false
+    
     var body: some View {
-        ZStack {
-            VStack(
-                alignment: .leading,
-                spacing: 20,
-            ) {
-                Text("\(node.label)")
-                    .font(.title)
-                    .frame(maxHeight: 20)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 5)
-            }
-            .frame(width: 200, height: 100, alignment: .leading)
+        GeometryReader { geometry in
+            ZStack {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("\(node.label)")
+                        .font(.title)
+                        .bold()
+                        .frame(maxHeight: 20)
+                        .padding(.horizontal, 30)
+                    
+                    ForEach(node.inputs, id: \.id) { input in
+                        HStack {
+                            Circle().size(width: 20, height: 20).frame(
+                                width: 20,
+                                height: 20,
+                            ).padding(.horizontal, 10)
+                            Text("Label").font(.caption)
+                        }.frame(width: 200, height: 20, alignment: .leading)
+                    }
+                    Spacer(minLength: 0)
+                }
+                .frame(width: 200, height: 150, alignment: .leading)
+                
+                VStack(alignment: .trailing, spacing: 20) {
+                    Spacer()
+                    ForEach(node.outputs, id: \.id) { input in
+                        HStack {
+                            Text("Label").font(.caption)
+                            Circle().size(width: 20, height: 20).frame(
+                                width: 20,
+                                height: 20,
+                            ).padding(.horizontal, 10)
+                        }.frame(width: 200, height: 20, alignment: .trailing)
+                    }.padding(.vertical, 5)
+                    Spacer()
+                }
+                .frame(width: 200, height: 150, alignment: .trailing)
+            }.padding(.vertical, 25)
         }
-        .background(Color.black.opacity(0.7))
-        .frame(width: 200, height: 100)
+        .background(Color.black)
+        .frame(width: 200, height: 170)
         .cornerRadius(10)
-        .gesture(
-            TapGesture(count: 1)
-                .onEnded({ value in
-                    print("Tapped node \(String(describing: node.id))")
-                })
+        .offset(
+            self.isDragging
+            ? CGSize(
+                width: self.offset.width + self.dragOffset.width,
+                height: self.offset.height + self.dragOffset.height
+            )
+            : self.offset
         )
         .gesture(
-            DragGesture(minimumDistance: 1)
-                .onEnded { value in
-                    print("Dragged node \(String(describing: node.id))")
-                }
+            SimultaneousGesture(
+                DragGesture(minimumDistance: 1)
+                    .updating($dragOffset) { value, state, _ in
+                        state = value.translation
+                    }
+                    .onEnded { value in
+                        self.offset.width += value.translation.width
+                        self.offset.height += value.translation.height
+                        
+                        isDragging = false
+                        print("Dragged node \(String(describing: node.id))")
+                    }
+                ,
+                TapGesture(count: 1)
+                    .onEnded({_ in self.isSelected.toggle()})
+            )
         )
     }
+        
 }
 
 #Preview {
     @Previewable @State var node = MathNode()
-    NodeView(node: $node.toAny())
+    @Previewable @State var graph = {
+        var g = Graph()
+        g.addNode(MathNode())
+        return g
+    }()
+
+    NodeView(node: node).environment(graph)
 }

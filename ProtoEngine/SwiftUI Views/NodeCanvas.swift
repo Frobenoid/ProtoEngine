@@ -8,20 +8,35 @@
 import QGraph
 import SwiftUI
 
+extension CGSize {
+    public static func / (lhs: CGSize, rhs: CGFloat) -> CGSize {
+        return CGSize(width: lhs.width / rhs, height: lhs.height / rhs)
+    }
+}
+
 struct NodeCanvas: View {
 
-    @Binding var graph: Graph
+    @Environment(Graph.self) var graph: Graph
 
     var body: some View {
-        ZStack {
-            ForEach($graph.nodes, id: \.id!) { node in
-                NodeView(node: node)
+        GeometryReader { geo in
+            ZStack {
+                ForEach(graph.nodes, id: \.id!) { node in
+                    NodeView(node: node).environment(graph)
+                }
             }
+            .offset(geo.size / 2)
+            .coordinateSpace(name: "graph")
         }
     }
 }
 
 #Preview {
-    @Previewable @State var graph: Graph = Graph()
-    NodeCanvas(graph: $graph)
+    @Previewable @State var graph: Graph = {
+        var g = Graph()
+        g.addNode(MathNode())
+        return g
+    }()
+
+    NodeCanvas().environment(graph)
 }
