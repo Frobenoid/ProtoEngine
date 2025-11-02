@@ -77,16 +77,16 @@ struct NodeView: View {
         .frame(width: 200, height: 170)
         .cornerRadius(10)
         .offset(
-            self.isDragging
+            self.node.isDragging
                 ? CGSize(
                     width: self.offset.width + self.dragOffset.width,
                     height: self.offset.height + self.dragOffset.height
                 )
-                : self.offset
+                : self.node.offset
         )
         .gesture(
             SimultaneousGesture(
-                DragGesture(minimumDistance: 1)
+                DragGesture(minimumDistance: 3)
                     .updating($dragOffset) { value, state, _ in
                         state = value.translation
                         self.node.isDragging = true
@@ -98,10 +98,9 @@ struct NodeView: View {
 
                         self.node.offset = self.offset
                         self.node.isDragging = false
-                        print("Dragged node \(String(describing: node.id))")
                     },
                 TapGesture(count: 1)
-                    .onEnded({ _ in self.isSelected.toggle() })
+                    .onEnded({ _ in self.node.isSelected.toggle() })
             )
         )
     }
