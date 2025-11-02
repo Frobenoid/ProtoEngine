@@ -38,8 +38,8 @@ struct NodeView: View {
         GeometryReader { geometry in
             ZStack {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("\(node.label)")
-                        .font(.title)
+                    Text("\(node.label), ID(\(node.id!))")
+                        .font(.subheadline)
                         .bold()
                         .frame(maxHeight: 20)
                         .padding(.horizontal, 30)

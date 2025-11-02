@@ -38,9 +38,7 @@ struct NodeCanvas: View {
             .coordinateSpace(name: "graph")
             .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
 
-                let links = graph.getLinks()
-
-                ForEach(links, id: \.hashValue) { link in
+                ForEach(graph.links, id: \.hashValue) { link in
                     if let sourceAnchor = socketAnchors[
                         graph.uidsMap[
                             PartialLink(
@@ -64,27 +62,39 @@ struct NodeCanvas: View {
                         let start = geo[sourceAnchor]
                         let end = geo[destAnchor]
 
-                        self.computePath(start: start, end: end)
-                            .strokedPath(
-                                StrokeStyle(
-                                    lineWidth: 5,
+                        let path = self.computePath(start: start, end: end)
+
+                        path
+                            .stroke(
+                                Color.gray.opacity(0.4),
+                                style: StrokeStyle(
+                                    lineWidth: 6,
                                     lineCap: .round,
-                                    lineJoin: .bevel,
                                     dash: [10, 10],
                                     dashPhase: 5
                                 )
                             )
-                            .stroke(Color.black.opacity(0.9), lineWidth: 3)
-                            .fill(
-                                Color.yellow.opacity(0.4)
+                            .background(
+                                path.stroke(
+                                    Color.black.opacity(0.9),
+                                    style: StrokeStyle(
+                                        lineWidth: 3,
+                                        lineCap: .round,
+                                        lineJoin: .bevel,
+                                        dash: [10, 10],
+                                        dashPhase: 15
+                                    )
+                                )
                             )
-                            .onHover { _ in
-                                print("HI")
-                            }
+                            .contentShape(
+                                path.strokedPath(StrokeStyle(lineWidth: 15))
+                            )
                             .gesture(
                                 TapGesture(count: 2).onEnded({
                                     _ in
-                                    print("HI?")
+                                    self.needsRedraw.toggle()
+                                    self.graph.disconnect(link: link)
+                                    print("Deleted link(\(link))")
                                 })
                             )
                     }
@@ -156,4 +166,5 @@ struct NodeCanvas: View {
     }()
 
     NodeCanvas().environment(graph)
+        .background(Color.white)
 }

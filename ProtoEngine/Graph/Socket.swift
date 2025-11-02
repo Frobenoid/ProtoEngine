@@ -23,6 +23,7 @@ protocol Socket {
 
     // Untyped value modifiers.
     mutating func setUntypedCurrentValue(to value: Any)
+    /// Gets the current value casted to ``Any``.
     mutating func untypedCurrentValue() -> Any
 
     func getNeighbors() -> Set<Link>

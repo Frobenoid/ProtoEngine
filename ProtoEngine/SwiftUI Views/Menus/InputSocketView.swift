@@ -28,6 +28,7 @@ struct InputSocketView: View {
                         to: ofNode,
                         atInput: inputSocket.id!
                     )
+                    Graph.Evaluator(graph: self.graph).evaluate()
                     return true
                 }
                 return true
@@ -39,7 +40,15 @@ struct InputSocketView: View {
                 value: .center,
                 transform: {
                     anchor in
-                    [graph.uidsMap[PartialLink(node: ofNode, socket: inputSocket.id!, isOutput: false)]! : anchor]
+                    [
+                        graph.uidsMap[
+                            PartialLink(
+                                node: ofNode,
+                                socket: inputSocket.id!,
+                                isOutput: false
+                            )
+                        ]!: anchor
+                    ]
                 }
             )
             .help("\(inputSocket.id!)")

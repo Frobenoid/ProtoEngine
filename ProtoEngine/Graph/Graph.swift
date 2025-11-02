@@ -19,6 +19,8 @@ class Graph {
 
     var uidsMap: [PartialLink: UUID] = [:]
 
+    private(set) var links: [Link] = []
+
     func addNode(_ node: Node) {
         node.id = NodeID(nodes.count)
 
@@ -44,40 +46,42 @@ class Graph {
         nodes[from]
             .outputs[atOutput]
             .connect(to: to, atInput: atInput)
+        updateLinks()
     }
 
     func disconnect(
         link: Link
     ) {
         nodes[link.sourceNode].outputs[link.sourceSocket].disconnect(link: link)
+        updateLinks()
     }
 
-    func getLinks() -> [Link] {
+    private func updateLinks() {
         var t: [Link] = []
-        for node in nodes {
-            for x in node.getNeighbors() {
-                var y = x
+        nodes.forEach { node in
+            node.getNeighbors().forEach {
+                var y = $0
                 y.sourceNode = node.id!
                 t.append(y)
             }
         }
-
-        return t
+        links = t
     }
 }
 
 extension Graph {
     private func execute(node: NodeID) {
+        print("Executing node \(node)")
         nodes[node].execute()
     }
 
     private func propagateValue(for node: NodeID) {
         for link in nodes[node].getNeighbors() {
-            let output = nodes[link.sourceNode].getUntypedOutput(
+            var output = nodes[link.sourceNode].getUntypedOutput(
                 at: link.sourceSocket
             )
             nodes[link.destinationNode].inputs[link.destinationSocket]
-                .setUntypedCurrentValue(to: output)
+                .setUntypedCurrentValue(to: output.untypedCurrentValue())
         }
     }
 
@@ -94,34 +98,36 @@ extension Graph {
 
         private var graph: Graph
         private var colors: [NodeID: Color] = [:]
-        private var visited: Set<NodeID> = []
         private var executionOrder: [NodeID] = []
 
-        init(graph: inout Graph) {
+        init(graph: Graph) {
             self.graph = graph
         }
 
         private func verifyIntegrity() {
+            self.executionOrder = []
+            dfs()
         }
 
         private func dfs() {
             // Setting all nodes to white.
-            let colors: [NodeID: Color] = Dictionary(
+            self.colors = Dictionary(
                 uniqueKeysWithValues: graph.nodes.map { node in
                     return (node.id!, .WHITE)
                 }
             )
 
-            graph.nodes.indices.filter { colors[$0] == .WHITE }.forEach {
-                node in
-                visit(node: node)
+            graph.nodes.indices.forEach { node in
+                if self.colors[node] == .WHITE {
+                    visit(node: node)
+                }
             }
 
         }
 
         func visit(node: NodeID) {
+            // Mark as discovered
             colors[node] = .GRAY
-            visited.insert(node)
 
             let neighbors = graph.nodes[node].getNeighbors()
 
@@ -136,14 +142,16 @@ extension Graph {
                 visit(node: $0.destinationNode)
             }
 
-            // Finish exploring the current node.
+            // Mark as explored
             executionOrder.append(node)
             colors[node] = .BLACK
         }
 
         func evaluate() {
+            print("Evaluating!")
             verifyIntegrity()
 
+            print(executionOrder)
             executionOrder.reversed().forEach { node in
                 graph.execute(node: node)
                 graph.propagateValue(for: node)
