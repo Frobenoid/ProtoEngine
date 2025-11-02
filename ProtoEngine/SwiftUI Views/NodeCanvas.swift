@@ -25,7 +25,8 @@ extension CGSize {
 struct NodeCanvas: View {
 
     @Environment(Graph.self) var graph: Graph
-
+    @State private var needsRedraw: Bool = false
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -35,16 +36,29 @@ struct NodeCanvas: View {
             }
             .offset(geo.size / 2)
             .coordinateSpace(name: "graph")
-        }
-        .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
-            let links = graph.getLinks()
-            
-            ForEach(links, id: \.hashValue){ link in
-                if let sourceAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.sourceNode, socket: link.sourceSocket)]!],
-                   let destAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.destinationNode, socket: link.destinationSocket)]!] {
-                    Text("Something")
+            .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
+                let links = graph.getLinks()
+                
+                ForEach(links, id: \.hashValue){ link in
+                    if let sourceAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.sourceNode, socket: link.sourceSocket, isOutput: true)]!],
+                       let destAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.destinationNode, socket: link.destinationSocket, isOutput: false)]!] {
+                        
+                        let start = geo[sourceAnchor]
+                        let end = geo[destAnchor]
+                        
+                        Path { path in
+                            path.move(to: start)
+                            path.addLine(to: start)
+                            path.addCurve(to: end, control1: start, control2: end)
+                            path.addLine(to: end)
+                        }
+                        .stroke(Color.black, lineWidth: 9)
+                        .onTapGesture(count: 2) {
+                            self.needsRedraw.toggle()
+                        }
+                    }
+                       
                 }
-                   
             }
         }
     }

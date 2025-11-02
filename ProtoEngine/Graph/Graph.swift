@@ -10,6 +10,7 @@ import Foundation
 struct PartialLink: Hashable {
     var node: NodeID
     var socket: SocketID
+    var isOutput: Bool
 }
 
 @Observable
@@ -26,10 +27,10 @@ class Graph {
         node.id = NodeID(nodes.count)
         
         for output in node.outputs {
-            uidsMap[PartialLink(node: node.id!, socket: output.id!)] = UUID()
+            uidsMap[PartialLink(node: node.id!, socket: output.id!,isOutput: true)] = UUID()
         }
         for input in node.inputs {
-            uidsMap[PartialLink(node: node.id!, socket: input.id!)] = UUID()
+            uidsMap[PartialLink(node: node.id!, socket: input.id!, isOutput: false)] = UUID()
         }
         nodes.append(node)
     }

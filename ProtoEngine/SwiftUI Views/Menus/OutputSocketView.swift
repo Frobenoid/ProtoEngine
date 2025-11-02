@@ -20,7 +20,7 @@ struct OutputSocketView: View {
                 key: SocketAnchorKey.self,
                 value: .center,
                 transform:  { anchor in
-                    [graph.uidsMap[PartialLink(node: ofNode, socket: outputSocket.id!)]! : anchor]
+                    [graph.uidsMap[PartialLink(node: ofNode, socket: outputSocket.id!, isOutput: true)]! : anchor]
                 }
             )
             .draggable(

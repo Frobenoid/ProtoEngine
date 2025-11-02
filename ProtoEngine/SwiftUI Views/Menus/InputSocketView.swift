@@ -39,7 +39,7 @@ struct InputSocketView: View {
                 value: .center,
                 transform: {
                     anchor in
-                    [graph.uidsMap[PartialLink(node: ofNode, socket: inputSocket.id!)]! : anchor]
+                    [graph.uidsMap[PartialLink(node: ofNode, socket: inputSocket.id!, isOutput: false)]! : anchor]
                 }
             )
             .help("\(inputSocket.id!)")
