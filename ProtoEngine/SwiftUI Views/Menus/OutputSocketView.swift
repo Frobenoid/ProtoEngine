@@ -10,19 +10,24 @@ import SwiftUI
 struct OutputSocketView: View {
     let outputSocket: any Socket
     let ofNode: NodeID
+    @Environment(Graph.self) var graph: Graph
 
     var body: some View {
         Circle()
             .fill(Color.red)
             .frame(width: 20)
+            .anchorPreference(
+                key: SocketAnchorKey.self,
+                value: .center,
+                transform:  { anchor in
+                    [graph.uidsMap[PartialLink(node: ofNode, socket: outputSocket.id!)]! : anchor]
+                }
+            )
             .draggable(
                 DraggableData(
                     socketID: self.outputSocket.id!,
                     sourceNodeID: ofNode
                 )
             )
-        //            .draggable(
-        //                DraggableData(socketID: self.outputSocket.id!)
-        //            )
     }
 }

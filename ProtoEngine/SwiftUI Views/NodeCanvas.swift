@@ -36,6 +36,17 @@ struct NodeCanvas: View {
             .offset(geo.size / 2)
             .coordinateSpace(name: "graph")
         }
+        .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
+            let links = graph.getLinks()
+            
+            ForEach(links, id: \.hashValue){ link in
+                if let sourceAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.sourceNode, socket: link.sourceSocket)]!],
+                   let destAnchor = socketAnchors[graph.uidsMap[PartialLink(node: link.destinationNode, socket: link.destinationSocket)]!] {
+                    Text("Something")
+                }
+                   
+            }
+        }
     }
 }
 

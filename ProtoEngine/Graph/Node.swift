@@ -35,7 +35,7 @@ class Node {
 
     func addInput(_ socket: any Socket) {
         inputs.append(socket)
-        inputs[inputs.count - 1].id = SocketID(inputs.count - 1)
+        inputs[inputs.count - 1].id = inputs.count - 1
     }
 
     func addOutput(_ socket: any Socket) {
@@ -47,10 +47,20 @@ class Node {
         outputs[Int(index)].setCurrentValue(to: value)
     }
 
+    func getNeighbors() -> Set<Link> {
+        var n = Set<Link>()
+        for output in outputs {
+            for i in output.getNeighbors() {
+                n.insert(i)
+            }
+        }
+        return n
+    }
+
     func execute() {}
 
     func connect(atOutput: SocketID, to: NodeID, atInput: SocketID) {
-
+        outputs[atOutput].connect(to: to, atInput: atInput)
     }
 }
 

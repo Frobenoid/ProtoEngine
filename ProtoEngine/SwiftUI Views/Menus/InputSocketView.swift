@@ -21,7 +21,6 @@ struct InputSocketView: View {
             .dropDestination(for: DraggableData.self) {
                 draggableData,
                 location in
-                print("Dropped at \(self.inputSocket.id!)")
                 if let first = draggableData.first {
                     self.graph.connect(
                         from: first.sourceNodeID,
@@ -34,6 +33,15 @@ struct InputSocketView: View {
                 return true
             } isTargeted: {
                 isDragTargeted = $0
-            }.help("\(inputSocket.id!)")
+            }
+            .anchorPreference(
+                key: SocketAnchorKey.self,
+                value: .center,
+                transform: {
+                    anchor in
+                    [graph.uidsMap[PartialLink(node: ofNode, socket: inputSocket.id!)]! : anchor]
+                }
+            )
+            .help("\(inputSocket.id!)")
     }
 }

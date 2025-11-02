@@ -5,10 +5,14 @@
 //  Created by Milton Montiel on 01/11/25.
 //
 
-typealias SocketID = UInt16
-typealias NodeID = UInt16
+import Foundation
+
+typealias SocketID = Int
+typealias NodeID = Int
 
 struct Link: Hashable {
+    
+    var sourceNode: NodeID
     let sourceSocket: SocketID
     let destinationNode: NodeID
     let destinationSocket: SocketID
@@ -28,28 +32,28 @@ protocol Socket {
 class InSocket<T>: Socket {
     var currentValue: T
     var defaultValue: T
-    
+
     var id: SocketID?
-    
+
     func setCurrentValue(to value: Any) {
         self.currentValue = value as! T
     }
-    
+
     func untypedCurrentValue() -> Any {
         return currentValue as Any
     }
-    
+
     func getNeighbors() -> Set<Link> {
         return []
     }
-    
+
     init(defaultValue: T) {
         self.currentValue = defaultValue
         self.defaultValue = defaultValue
     }
-    
+
     func connect(to: NodeID, atInput: SocketID) {
-       print("CALLED CONNECT ON AN INPUT SOCKET")
+        print("CALLED CONNECT ON AN INPUT SOCKET")
     }
 
 }
@@ -57,27 +61,34 @@ class InSocket<T>: Socket {
 class OutSocket<T>: Socket {
     var currentValue: T
     var defaultValue: T
-    
+
     var id: SocketID?
-    
+
     var neighbors: Set<Link> = []
-    
+
     func setCurrentValue(to value: Any) {
         self.currentValue = value as! T
     }
-    
+
     func untypedCurrentValue() -> Any {
         return currentValue as Any
     }
-    
+
     func getNeighbors() -> Set<Link> {
-        return []
+        return neighbors
     }
-    
+
     func connect(to: NodeID, atInput: SocketID) {
-        neighbors.insert(Link(sourceSocket: id!, destinationNode: to, destinationSocket: atInput))
+        neighbors.insert(
+            Link(
+                sourceNode: 0, 
+                sourceSocket: id!,
+                destinationNode: to,
+                destinationSocket: atInput
+            )
+        )
     }
-    
+
     init(defaultValue: T) {
         self.currentValue = defaultValue
         self.defaultValue = defaultValue
