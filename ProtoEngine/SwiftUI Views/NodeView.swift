@@ -44,14 +44,11 @@ struct NodeView: View {
                         .frame(maxHeight: 20)
                         .padding(.horizontal, 30)
 
+                    Divider()
+
                     ForEach(node.inputs, id: \.id) { input in
-                        HStack {
-                            Circle().size(width: 20, height: 20).frame(
-                                width: 20,
-                                height: 20,
-                            ).padding(.horizontal, 10)
-                            Text("Label").font(.caption)
-                        }.frame(width: 200, height: 20, alignment: .leading)
+                        InputSocketView(inputSocket: input, ofNode: node.id!)
+                            .padding(.horizontal, 10)
                     }
                     Spacer(minLength: 0)
                 }
@@ -59,21 +56,16 @@ struct NodeView: View {
 
                 VStack(alignment: .trailing, spacing: 20) {
                     Spacer()
-                    ForEach(node.outputs, id: \.id) { input in
-                        HStack {
-                            Text("Label").font(.caption)
-                            Circle().size(width: 20, height: 20).frame(
-                                width: 20,
-                                height: 20,
-                            ).padding(.horizontal, 10)
-                        }.frame(width: 200, height: 20, alignment: .trailing)
-                    }.padding(.vertical, 5)
+                    ForEach(node.outputs, id: \.id) { output in
+                        OutputSocketView(outputSocket: output, ofNode: node.id!)
+                            .padding(.horizontal, 10)
+                    }
                     Spacer()
                 }
                 .frame(width: 200, height: 150, alignment: .trailing)
             }.padding(.vertical, 25)
         }
-        .background(Color.black)
+        .background(Color.black.opacity(0.9))
         .frame(width: 200, height: 170)
         .cornerRadius(10)
         .offset(

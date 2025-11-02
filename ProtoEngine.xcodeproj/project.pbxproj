@@ -10,6 +10,16 @@
 		DCC4302E2E621F14009BDAE4 /* ProtoEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProtoEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DC7C0B2C2EB700E1009E4C6E /* Exceptions for "ProtoEngine" folder in "ProtoEngine" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DCC4302D2E621F14009BDAE4 /* ProtoEngine */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DC7C2B842EB5C30400A19EB1 /* QGraph */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -18,6 +28,9 @@
 		};
 		DCC430302E621F14009BDAE4 /* ProtoEngine */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DC7C0B2C2EB700E1009E4C6E /* Exceptions for "ProtoEngine" folder in "ProtoEngine" target */,
+			);
 			path = ProtoEngine;
 			sourceTree = "<group>";
 		};
@@ -264,6 +277,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProtoEngine/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -296,6 +311,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProtoEngine/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var cameraType: CameraType = .FirstPerson
     @State private var debugLights: Bool = false
     @State private var graph = Graph()
-    
+
     @State private var scrollOffset: CGPoint = .zero
     @State private var hitTestEnable = true
 
@@ -42,13 +42,13 @@ struct ContentView: View {
                     x: geo.contentSize.width / 2,
                     y: geo.contentSize.height / 2
                 )
-                
-                print("WFT?")
+
                 return center
-            } action: {oldScrollOffset, newScrollOffset in
+            } action: { oldScrollOffset, newScrollOffset in
                 self.scrollOffset = newScrollOffset
-            } .onScrollPhaseChange {
-                old, new in
+            }.onScrollPhaseChange {
+                old,
+                new in
                 self.hitTestEnable = !new.isScrolling
             }
             HStack {
