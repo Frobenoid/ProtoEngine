@@ -4,6 +4,7 @@
 //
 //  Created by Milton Montiel on 01/11/25.
 //
+import CoreGraphics
 
 class Node {
     var inputs: [any Socket] = []
@@ -11,6 +12,10 @@ class Node {
 
     var label: String = ""
     var id: NodeID?
+
+    var isSelected = false
+    var isDragging = true
+    var offset: CGSize = .zero
 
     func getUntypedInput(at index: SocketID) -> any Socket {
         return inputs[Int(index)]
@@ -75,7 +80,7 @@ class ConstantNode: Node {
         addOutput(OutSocket(defaultValue: 100))
         label = "Constant"
     }
-    
+
     override func execute() {
     }
 }

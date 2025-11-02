@@ -21,18 +21,19 @@ extension Binding {
                 self.wrappedValue = newSpecific
             }
         )
+
     }
 }
 
 struct NodeView: View {
     let node: Node
     @Environment(Graph.self) var graph: Graph
-    
+
     @State private var offset = CGSize.zero
     @GestureState private var dragOffset: CGSize = .zero
     @State private var isDragging = false
     @State private var isSelected: Bool = false
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -42,7 +43,7 @@ struct NodeView: View {
                         .bold()
                         .frame(maxHeight: 20)
                         .padding(.horizontal, 30)
-                    
+
                     ForEach(node.inputs, id: \.id) { input in
                         HStack {
                             Circle().size(width: 20, height: 20).frame(
@@ -55,7 +56,7 @@ struct NodeView: View {
                     Spacer(minLength: 0)
                 }
                 .frame(width: 200, height: 150, alignment: .leading)
-                
+
                 VStack(alignment: .trailing, spacing: 20) {
                     Spacer()
                     ForEach(node.outputs, id: \.id) { input in
@@ -77,32 +78,34 @@ struct NodeView: View {
         .cornerRadius(10)
         .offset(
             self.isDragging
-            ? CGSize(
-                width: self.offset.width + self.dragOffset.width,
-                height: self.offset.height + self.dragOffset.height
-            )
-            : self.offset
+                ? CGSize(
+                    width: self.offset.width + self.dragOffset.width,
+                    height: self.offset.height + self.dragOffset.height
+                )
+                : self.offset
         )
         .gesture(
             SimultaneousGesture(
                 DragGesture(minimumDistance: 1)
                     .updating($dragOffset) { value, state, _ in
                         state = value.translation
+                        self.node.isDragging = true
+                        self.node.offset = self.offset + self.dragOffset
                     }
                     .onEnded { value in
                         self.offset.width += value.translation.width
                         self.offset.height += value.translation.height
-                        
-                        isDragging = false
+
+                        self.node.offset = self.offset
+                        self.node.isDragging = false
                         print("Dragged node \(String(describing: node.id))")
-                    }
-                ,
+                    },
                 TapGesture(count: 1)
-                    .onEnded({_ in self.isSelected.toggle()})
+                    .onEnded({ _ in self.isSelected.toggle() })
             )
         )
     }
-        
+
 }
 
 #Preview {
