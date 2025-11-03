@@ -19,32 +19,43 @@ class Graph {
     var uidsMap: [PartialLink: UUID] = [:]
 
     private(set) var links: [Link] = []
+    var shouldUpdate: Bool = false
 
     func addNode(_ node: Node) {
         node.id = NodeID(nodes.count)
 
-        for output in node.outputs {
+        node.outputs.forEach { output in
             uidsMap[
                 PartialLink(node: node.id!, socket: output.id!, isOutput: true)
             ] = UUID()
+
         }
-        for input in node.inputs {
+
+        node.inputs.forEach { input in
             uidsMap[
                 PartialLink(node: node.id!, socket: input.id!, isOutput: false)
             ] = UUID()
         }
+
         nodes.append(node)
     }
+
     func connect(link: Link) {
         links.append(link)
     }
 
     func disconnect(link: Link) {
+        // Remove the link
         if let index = links.firstIndex(of: link) {
             links.remove(at: index)
         } else {
             fatalError("Tried to remove a link that wasn't in the list")
         }
+        // Restore to default value for output/input sockets
+        nodes[link.sourceNode].outputs[link.sourceSocket]
+            .restoreToDefaultValue()
+        nodes[link.destinationNode].inputs[link.destinationSocket]
+            .restoreToDefaultValue()
     }
 
 }
@@ -137,6 +148,7 @@ extension Graph {
                 graph.execute(node: node)
                 graph.propagateValue(for: node)
             }
+            graph.shouldUpdate.toggle()
         }
     }
 }

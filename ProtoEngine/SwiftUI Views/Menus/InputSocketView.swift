@@ -56,9 +56,8 @@ struct InputSocketView: View {
                     }
                 )
                 .help("\(inputSocket.id!)")
-            Text("\(inputSocket.untypedCurrentValue())")
             Text(
-                "\(graph.nodes[ofNode].inputs[inputSocket.id!].untypedCurrentValue())"
+                "\(graph.shouldUpdate ? "" : "")\(inputSocket.untypedCurrentValue())"
             )
         }
     }

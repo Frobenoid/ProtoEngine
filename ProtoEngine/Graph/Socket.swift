@@ -20,16 +20,17 @@ struct Link: Hashable, Identifiable {
 
 protocol Socket {
     var id: SocketID? { get set }
-
+    
     // Untyped value modifiers.
     mutating func setUntypedCurrentValue(to value: Any)
     /// Gets the current value casted to ``Any``.
     func untypedCurrentValue() -> Any
-
+    
     func getNeighbors() -> Set<Link>
-    // TODO: Remove the parentNode parameter and set a parentID prop to each socket. 
+    // TODO: Remove the parentNode parameter and set a parentID prop to each socket.
     func connect(parentNode: NodeID, to: NodeID, atInput: SocketID)
     func disconnect(link: Link)
+    func restoreToDefaultValue()
 }
 
 class InSocket<T>: Socket {
@@ -61,6 +62,10 @@ class InSocket<T>: Socket {
 
     func disconnect(link: Link) {
         print("CALLED DISCONNECT ON AN INPUT SOCKET")
+    }
+    
+    func restoreToDefaultValue() {
+        self.currentValue = self.defaultValue
     }
 }
 
@@ -103,5 +108,9 @@ class OutSocket<T>: Socket {
     init(defaultValue: T) {
         self.currentValue = defaultValue
         self.defaultValue = defaultValue
+    }
+    
+    func restoreToDefaultValue() {
+        self.currentValue = self.defaultValue
     }
 }

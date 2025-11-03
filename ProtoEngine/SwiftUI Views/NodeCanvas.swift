@@ -37,7 +37,7 @@ struct NodeCanvas: View {
             .coordinateSpace(name: "graph")
             .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
 
-                ForEach(graph.links,id: \.id) { link in
+                ForEach(graph.links, id: \.id) { link in
                     if let sourceAnchor = socketAnchors[
                         graph.uidsMap[
                             PartialLink(
@@ -80,7 +80,8 @@ struct NodeCanvas: View {
                                 TapGesture(count: 2).onEnded({
                                     _ in
                                     self.graph.disconnect(link: link)
-                                    print("Deleted link(\(link))")
+                                    Graph.Evaluator(graph: graph).evaluate()
+
                                 })
                             )
                     }
@@ -147,7 +148,14 @@ struct NodeCanvas: View {
         var g = Graph()
         g.addNode(ConstantNode())
         g.addNode(MathNode())
-        g.connect(link: Link(sourceNode: 0, sourceSocket: 0, destinationNode: 1, destinationSocket: 0 ))
+        g.connect(
+            link: Link(
+                sourceNode: 0,
+                sourceSocket: 0,
+                destinationNode: 1,
+                destinationSocket: 0
+            )
+        )
         return g
     }()
 

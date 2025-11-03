@@ -14,7 +14,9 @@ struct OutputSocketView: View {
 
     var body: some View {
         HStack {
-            Text("\(graph.nodes[ofNode].outputs[outputSocket.id!].untypedCurrentValue())")
+            Text(
+                "\(graph.shouldUpdate ? "" : "")\(outputSocket.untypedCurrentValue())"
+            )
             Circle()
                 .fill(Color.red)
                 .frame(width: 20)
