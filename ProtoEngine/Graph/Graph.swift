@@ -16,7 +16,6 @@ struct PartialLink: Hashable {
 @Observable
 class Graph {
     var nodes: [Node] = []
-
     var uidsMap: [PartialLink: UUID] = [:]
 
     private(set) var links: [Link] = []
@@ -36,38 +35,18 @@ class Graph {
         }
         nodes.append(node)
     }
-
-    func connect(
-        from: NodeID,
-        atOutput: SocketID,
-        to: NodeID,
-        atInput: SocketID
-    ) {
-        nodes[from]
-            .outputs[atOutput]
-            .connect(parentNode: from, to: to, atInput: atInput)
-        updateLinks()
+    func connect(link: Link) {
+        links.append(link)
     }
 
-    func disconnect(
-        link: Link
-    ) {
-        nodes[link.sourceNode].outputs[link.sourceSocket].disconnect(link: link)
-        updateLinks()
-    }
-
-    private func updateLinks() {
-        var t: [Link] = []
-        nodes.forEach { node in
-            node.getNeighbors().forEach {
-                var y = $0
-                y.sourceNode = node.id!
-                t.append(y)
-            }
+    func disconnect(link: Link) {
+        if let index = links.firstIndex(of: link) {
+            links.remove(at: index)
+        } else {
+            fatalError("Tried to remove a link that wasn't in the list")
         }
-        links = t
-        print(links)
     }
+
 }
 
 extension Graph {
@@ -77,12 +56,13 @@ extension Graph {
     }
 
     private func propagateValue(for node: NodeID) {
-        for link in nodes[node].getNeighbors() {
-            var output = nodes[link.sourceNode].getUntypedOutput(
+        links.forEach { link in
+            let output = nodes[link.sourceNode].getUntypedOutput(
                 at: link.sourceSocket
             )
             nodes[link.destinationNode].inputs[link.destinationSocket]
                 .setUntypedCurrentValue(to: output.untypedCurrentValue())
+
         }
     }
 
@@ -130,7 +110,7 @@ extension Graph {
             // Mark as discovered
             colors[node] = .GRAY
 
-            let neighbors = graph.nodes[node].getNeighbors()
+            let neighbors = graph.links.filter { $0.sourceNode == node }
 
             // Check if there are directed cycles.
             if (neighbors.contains { colors[$0.destinationNode] == .GRAY }) {

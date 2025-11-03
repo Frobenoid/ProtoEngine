@@ -10,8 +10,8 @@ import Foundation
 typealias SocketID = Int
 typealias NodeID = Int
 
-struct Link: Hashable {
-
+struct Link: Hashable, Identifiable {
+    var id: UUID { UUID() }
     var sourceNode: NodeID
     let sourceSocket: SocketID
     let destinationNode: NodeID
@@ -24,7 +24,7 @@ protocol Socket {
     // Untyped value modifiers.
     mutating func setUntypedCurrentValue(to value: Any)
     /// Gets the current value casted to ``Any``.
-    mutating func untypedCurrentValue() -> Any
+    func untypedCurrentValue() -> Any
 
     func getNeighbors() -> Set<Link>
     // TODO: Remove the parentNode parameter and set a parentID prop to each socket. 

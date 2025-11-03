@@ -37,7 +37,7 @@ struct NodeCanvas: View {
             .coordinateSpace(name: "graph")
             .overlayPreferenceValue(SocketAnchorKey.self) { socketAnchors in
 
-                ForEach(graph.links, id: \.hashValue) { link in
+                ForEach(graph.links,id: \.id) { link in
                     if let sourceAnchor = socketAnchors[
                         graph.uidsMap[
                             PartialLink(
@@ -147,7 +147,7 @@ struct NodeCanvas: View {
         var g = Graph()
         g.addNode(ConstantNode())
         g.addNode(MathNode())
-        g.connect(from: 0, atOutput: 0, to: 1, atInput: 0)
+        g.connect(link: Link(sourceNode: 0, sourceSocket: 0, destinationNode: 1, destinationSocket: 0 ))
         return g
     }()
 

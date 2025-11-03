@@ -48,7 +48,7 @@ class Node {
     }
 
     func setOutput(at index: SocketID, to value: Any) {
-        outputs[Int(index)].setUntypedCurrentValue(to: value)
+        outputs[index].setUntypedCurrentValue(to: value)
     }
 
     func getNeighbors() -> Set<Link> {
@@ -71,9 +71,9 @@ class Node {
 class MathNode: Node {
     override init() {
         super.init()
-        addInput(InSocket<Int>(defaultValue: 100))
-        addInput(InSocket<Int>(defaultValue: 100))
-        addOutput(OutSocket(defaultValue: 0))
+        addInput(InSocket<Int>(defaultValue: 0))
+        addInput(InSocket<Int>(defaultValue: 0))
+        addOutput(OutSocket<Int>(defaultValue: 0))
         label = "Math"
     }
 
